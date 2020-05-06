@@ -1,0 +1,2 @@
+include ':app', ':wcs-android-sdk-1.1.0.13-release'
+rootProject.name='WFCStream'

@@ -1,0 +1,95 @@
+<resources>
+    <string name="app_name">WFCStream</string>
+
+    <!-- Web Call Server -->
+    <string name="web_call_server_url">test.ru</string>
+
+    <!-- Welcome fragment -->
+    <string name="welcome_fragment_title">Добро пожаловать</string>
+    <string name="welcome_fragment_welcome_message">Добро пожаловать на WFS!</string>
+    <string name="welcome_fragment_log_in_button">Войти</string>
+    <string name="welcome_fragment_sign_in_button">Регистрация</string>
+
+    <!-- Log in fragment -->
+    <string name="log_in_fragment_title">Вход</string>
+    <string name="log_in_fragment_user_name">Имя пользователя</string>
+    <string name="log_in_fragment_password">Пароль</string>
+    <string name="log_in_fragment_log_in_button">Войти</string>
+
+    <!-- Registration fragment -->
+    <string name="registration_fragment_title">Регистрация</string>
+    <string name="registration_fragment_login">Логин</string>
+    <string name="registration_fragment_user_name">Имя пользователя</string>
+    <string name="registration_fragment_password">Пароль</string>
+    <string name="registration_fragment_confirm_password">Подтвердите пароль</string>
+    <string name="registration_fragment_register_button">Регистрация</string>
+
+    <!-- Home fragment -->
+    <string name="home_fragment_active_channels">Активные каналы:</string>
+    <string name="home_fragment_absence_of_active_channels">Нет активных каналов</string>
+    <string name="home_fragment_inactive_channels">Неактивные каналы:</string>
+    <string name="home_fragment_absence_of_inactive_channels">Информация появится в одном из следующих обновлений</string>
+    <string name="home_fragment_title">Просмотр</string>
+
+    <!-- Broadcast fragment -->
+    <string name="broadcast_fragment_chat_coming_soon">Чат появится в одном из следующих обновлений</string>
+    <string name="broadcast_fragment_title">Трансляция</string>
+
+    <!-- Streamer home fragment -->
+    <string name="streamer_home_fragment_title">Настройки трансляции</string>
+    <string name="streamer_home_fragment_stream_name">Название трансляции</string>
+    <string name="streamer_home_fragment_start_stream">Начать трансляцию</string>
+    <string name="streamer_home_fragment_log_out">Выйти</string>
+
+    <!-- Camera and microphone permissions fragment -->
+    <string name="cam_and_mic_permissions_fragment_title">Разрешения</string>
+    <string name="cam_and_mic_permissions_fragment_main_description">Разрешения на использование камеры и микрофона</string>
+    <string name="cam_and_mic_permissions_fragment_secondary_description">Еще немного, и вы сможете начать трансляцию.</string>
+    <string name="cam_and_mic_permissions_fragment_switch_on_microphone">Включить микрофон</string>
+    <string name="cam_and_mic_permissions_fragment_switch_on_camera">Включить камеру</string>
+    <string name="cam_and_mic_permissions_fragment_camera_switched_on_text">Камера включена</string>
+    <string name="cam_and_mic_permissions_fragment_microphone_switched_on_text">Микрофон включен</string>
+
+    <!-- Stream broadcasting fragment -->
+    <string name="stream_broadcasting_fragment_title">Прямой эфир</string>
+    <string name="stream_broadcasting_fragment_start_broadcast_button">Начать трансляцию</string>
+    <string name="stream_broadcasting_fragment_stop_broadcast_button">Остановить трансляцию</string>
+
+    <!-- Base result code errors -->
+    <string name="base_result_code_default_error_message">Не удалось выполнить запрос.</string>
+
+    <!-- Log in result code -->
+    <string name="log_in_result_code_success">Вы успешно аторизованы.</string>
+    <string name="log_in_result_code_wrong_login_or_password">Неверный логин или пароль.</string>
+    <string name="log_in_result_code_unknown">Не удалось авторизоваться.</string>
+
+    <!-- Register result code -->
+    <string name="register_result_code_success">Регистрация прошла успешно.</string>
+    <string name="register_result_code_login_already_exists">Указанный логин уже используется другим пользователем.</string>
+    <string name="register_result_code_user_name_is_already_used">Указанное имя пользователя уже используется.</string>
+    <string name="register_result_code_unknown">Не удалось зарегистрироваться по неизвестной причине.</string>
+
+    <!-- Log out result code -->
+    <string name="log_out_result_code_success">Вы успешно вышли из аккаунта.</string>
+    <string name="log_out_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="log_out_result_code_unknown">Не удалось опубликовать трансляцию.</string>
+
+    <!-- Notify broadcast started result_code -->
+    <string name="notify_broadcast_started_result_code_success">Трансляция опубликована.</string>
+    <string name="notify_broadcast_started_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="notify_broadcast_started_result_code_broadcast_is_already_published">Трансляция уже идет.</string>
+    <string name="notify_broadcast_started_result_code_unknown">Не удалось опубликовать трансляцию.</string>
+
+    <!-- Notify broadcast stopped result code -->
+    <string name="notify_broadcast_stopped_result_code_success">Трансляция завершена.</string>
+    <string name="notify_broadcast_stopped_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="notify_broadcast_stopped_result_code_broadcast_already_offline">Трансляция уже завершена.</string>
+    <string name="notify_broadcast_stopped_result_code_unknown">Не удалось завершить трансляцию.</string>
+
+    <!-- Update broadcast name result code -->
+    <string name="update_broadcast_name_result_code_success">Название трансляции изменено.</string>
+    <string name="update_broadcast_name_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="update_broadcast_name_result_code_unknown">Не удалось изменить название трансляции по неизвестной причине.</string>
+
+    <string name="content_is_not_loaded">Произошло что-то странное…\n повторите попытку позже.</string>
+</resources>

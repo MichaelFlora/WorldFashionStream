@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/destination_home">
+
+    <action
+        android:id="@+id/action_global_destination_welcome"
+        app:destination="@id/destination_welcome"
+        app:popUpTo="@id/destination_home"
+        app:popUpToInclusive="true"/>
+
+    <action
+        android:id="@+id/action_global_destination_home"
+        app:destination="@id/destination_home"
+        app:popUpTo="@id/destination_home"
+        app:popUpToInclusive="true"/>
+
+    <fragment
+        android:id="@+id/destination_home"
+        android:name="com.flora.michael.wfcstream.view.home.HomeFragment"
+        android:label="@string/home_fragment_title"
+        tools:layout="@layout/home_fragment">
+
+        <action
+            android:id="@+id/action_destination_home_to_destination_stream"
+            app:destination="@id/destination_stream"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_destination_home_to_destination_streamer_home"
+            app:destination="@id/destination_streamer_home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_stream"
+        android:name="com.flora.michael.wfcstream.view.stream.StreamFragment"
+        android:label="@string/broadcast_fragment_title"
+        tools:layout="@layout/stream_fragment">
+
+        <argument
+            android:name="broadcastId"
+            app:argType="long"
+            app:nullable="false"/>
+
+        <argument
+            android:name="channelName"
+            app:argType="string"
+            app:nullable="false"/>
+
+        <argument
+            android:name="broadcastTitle"
+            app:argType="string"
+            app:nullable="false"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_welcome"
+        android:name="com.flora.michael.wfcstream.view.welcome.WelcomeFragment"
+        android:label="@string/welcome_fragment_title"
+        tools:layout="@layout/welcome_fragment">
+
+        <action
+            android:id="@+id/action_destination_welcome_to_destination_log_in"
+            app:destination="@id/destination_log_in"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_destination_welcome_to_destination_registration"
+            app:destination="@id/destination_registration"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_log_in"
+        android:name="com.flora.michael.wfcstream.view.login.LogInFragment"
+        android:label="@string/log_in_fragment_title"
+        tools:layout="@layout/log_in_fragment">
+
+        <action
+            android:id="@+id/action_destination_log_in_to_destination_home"
+            app:destination="@id/destination_home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_registration"
+        android:name="com.flora.michael.wfcstream.view.registration.RegistrationFragment"
+        android:label="@string/registration_fragment_title"
+        tools:layout="@layout/registration_fragment">
+
+        <action
+            android:id="@+id/action_destination_registration_to_destination_home"
+            app:destination="@id/destination_home"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_streamer_home"
+        android:name="com.flora.michael.wfcstream.view.streamerhome.StreamerHomeFragment"
+        android:label="@string/streamer_home_fragment_title"
+        tools:layout="@layout/streamer_home_fragment">
+
+        <action
+            android:id="@+id/action_destination_streamer_home_to_destination_cam_and_mic_permissions"
+            app:destination="@id/destination_cam_and_mic_permissions"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+        <action
+            android:id="@+id/action_destination_streamer_home_to_destination_stream_broadcasting"
+            app:destination="@id/destination_stream_broadcasting"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_cam_and_mic_permissions"
+        android:name="com.flora.michael.wfcstream.view.camandmicpermissions.CamAndMicPermissionsFragment"
+        android:label="@string/cam_and_mic_permissions_fragment_title"
+        tools:layout="@layout/cam_and_mic_permissions_fragment">
+
+        <action
+            android:id="@+id/action_destination_cam_and_mic_permissions_to_destination_stream_broadcasting_permissions"
+            app:destination="@id/destination_stream_broadcasting"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/stay_as_is"
+            app:popEnterAnim="@anim/stay_as_is"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/destination_streamer_home"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/destination_stream_broadcasting"
+        android:name="com.flora.michael.wfcstream.view.streambroadcasting.StreamBroadcastingFragment"
+        android:label="@string/stream_broadcasting_fragment_title"
+        tools:layout="@layout/stream_broadcasting_fragment"/>
+
+
+
+</navigation>
