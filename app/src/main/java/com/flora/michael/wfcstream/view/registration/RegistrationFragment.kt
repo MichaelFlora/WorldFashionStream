@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.model.resultCode.authorization.RegisterResultCode
 import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.view.login.LogInFragmentDirections
 import com.flora.michael.wfcstream.viewmodel.registration.RegistrationViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -32,6 +33,7 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findAllViews()
         initializeAllViews()
+        startObservingSuccessfulRegistration()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -143,23 +145,31 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
     }
 
     private fun initializeRegistrationButton(){
-        viewModel.isErrorsExist.observe(viewLifecycleOwner, Observer{ isErrorExist: Boolean? ->
+        viewModel.isEnteredDataErrorsExist.observe(viewLifecycleOwner, Observer{ isErrorExist: Boolean? ->
             registerButton?.isEnabled = isErrorExist?.not() ?: false
         })
 
         registerButton?.setOnClickListener {
             viewModel.register()
+            showLoadingProgressBar()
         }
     }
 
     private fun initializeRegistrationResultToast(){
-        viewModel.registrationResult.observe(viewLifecycleOwner, Observer{ registerResultCode ->
-            registerResultCode?.let {
-                if(registerResultCode == RegisterResultCode.Success){
-                    return@Observer
-                }
+        viewModel.registrationResult.observe(viewLifecycleOwner, Observer{ registrationResult ->
+            hideLoadingProgressBar()
 
-                Toast.makeText(context, it.description, Toast.LENGTH_SHORT).show()
+            registrationResult?.let { errorDescription ->
+                Toast.makeText(context, errorDescription, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun startObservingSuccessfulRegistration(){
+        sharedViewModel.authorizationToken.observe(viewLifecycleOwner, Observer { accessToken ->
+            if(accessToken != null){
+                val action = RegistrationFragmentDirections.actionDestinationRegistrationToDestinationHome()
+                navigationController.navigate(action)
             }
         })
     }

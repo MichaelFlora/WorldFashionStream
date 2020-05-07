@@ -2,6 +2,7 @@ package com.flora.michael.wfcstream.viewmodel.registration
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.flora.michael.wfcstream.model.resultCode.authorization.LogInResultCode
 import com.flora.michael.wfcstream.model.resultCode.authorization.RegisterResultCode
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
 import kotlinx.coroutines.launch
@@ -18,7 +19,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
     private val userNameMutable = MutableLiveData<String>()
     private val passwordMutable = MutableLiveData<String>()
     private val confirmPasswordMutable = MutableLiveData<String>()
-    private val registerResultMutable = MutableLiveData<RegisterResultCode>()
+    private val registerResultMutable = MutableLiveData<String?>()
 
     private val loginErrorMutable = MutableLiveData<String>()
     private val userNameErrorMutable = MutableLiveData<String>()
@@ -29,13 +30,13 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
     val userName: LiveData<String> = userNameMutable
     val password: LiveData<String> = passwordMutable
     val confirmPassword: LiveData<String> = confirmPasswordMutable
-    val registrationResult: LiveData<RegisterResultCode> = registerResultMutable
+    val registrationResult: LiveData<String?> = registerResultMutable
 
     val loginError: LiveData<String> = loginErrorMutable
     val userNameError: LiveData<String> = userNameErrorMutable
     val passwordError: LiveData<String> = passwordErrorMutable
     val confirmPasswordError: LiveData<String> = confirmPasswordErrorMutable
-    val isErrorsExist: LiveData<Boolean> = MediatorLiveData<Boolean>().apply {
+    val isEnteredDataErrorsExist: LiveData<Boolean> = MediatorLiveData<Boolean>().apply {
 
         fun onLiveDataValueChanged(changedLiveData: LiveData<*>){
             value = !(checkIsLoginCorrect(changedLiveData == login) and
@@ -60,22 +61,18 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
     fun updateLogin(enteredLogin: String){
         loginMutable.value = enteredLogin
-        //checkIsLoginCorrect(isWithErrorMessage = true)
     }
 
     fun updateUserName(enteredUserName: String){
         userNameMutable.value = enteredUserName
-        //checkIsUserNameCorrect(isWithErrorMessage = true)
     }
 
     fun updatePassword(enteredPassword: String){
         passwordMutable.value = enteredPassword
-        //checkIsPasswordCorrect(isWithErrorMessage = true)
     }
 
     fun updateConfirmPassword(enteredPassword: String){
         confirmPasswordMutable.value = enteredPassword
-        //checkIsConfirmPasswordCorrect(isWithErrorMessage = true)
     }
 
     fun register(){
@@ -86,7 +83,19 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
             userName.value?.let { userName ->
                 password.value?.let { password ->
                     viewModelScope.launch {
-                        registerResultMutable.value = authorizationRepository.register(login, password, userName)
+                        val registerResultCode = authorizationRepository.register(login, password, userName)
+
+                        if(registerResultCode == RegisterResultCode.Success){
+                            val logInResultCode = authorizationRepository.logIn(login, password)
+
+                            registerResultMutable.value = if(logInResultCode != LogInResultCode.Success){
+                                getApplication<Application>().getString(logInResultCode.description)
+                            } else{
+                                null
+                            }
+                        } else{
+                            registerResultMutable.value = getApplication<Application>().getString(registerResultCode.description)
+                        }
                     }
                 }
             }

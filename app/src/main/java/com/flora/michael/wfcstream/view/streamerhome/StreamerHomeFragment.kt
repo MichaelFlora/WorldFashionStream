@@ -54,7 +54,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
     private fun initializeContentLoadingObservation(){
         viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
             when{
-                isContentLoading -> showLoadingProgressBar()
+                isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
                 viewModel.isBroadcastInformationLoaded() ->
                     hideLoadingProgressBar()
                 else ->

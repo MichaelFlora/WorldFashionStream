@@ -29,15 +29,30 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/loadable_content_fragment_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleLarge"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/loadable_content_fragment_progress_bar_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#33000000"
         android:visibility="invisible"
+        android:clickable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible">
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/loadable_content_fragment_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/progressBarStyleLarge"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

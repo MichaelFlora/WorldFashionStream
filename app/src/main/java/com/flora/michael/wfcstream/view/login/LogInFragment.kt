@@ -77,7 +77,6 @@ class LogInFragment : LoadableContentFragment(R.layout.log_in_fragment) {
             if(accessToken != null){
                 val action = LogInFragmentDirections.actionDestinationLogInToDestinationHome()
                 navigationController.navigate(action)
-                //navigationController.popBackStack(R.id.destination_home, false)
             }
         })
     }

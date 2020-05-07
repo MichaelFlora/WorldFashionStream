@@ -61,8 +61,6 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         initializeAllViews()
         viewModel.initialize(broadcastNavigationArguments.broadcastId)
         connectToWebCallServer()
-        getWebCallServerBroadcast()
-        webCallServerBroadcast?.play()
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -148,7 +146,8 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             }
 
             override fun onConnected(connection: Connection?) {
-                //isConnectedToWebCallServer = true
+                getWebCallServerBroadcast()
+                webCallServerBroadcast?.play()
             }
 
             override fun onRegistered(connection: Connection?) {

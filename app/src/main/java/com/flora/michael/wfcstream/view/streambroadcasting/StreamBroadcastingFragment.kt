@@ -103,7 +103,7 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     private fun initializeContentLoadingObservation(){
         viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
             when{
-                isContentLoading -> showLoadingProgressBar()
+                isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
                 viewModel.isBroadcastInformationLoaded() -> hideLoadingProgressBar()
                 else -> hideLoadingProgressBar(withError = true)
             }
@@ -177,7 +177,6 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
                 startStopBroadcastingButton?.setOnClickListener {
                     try{
                         webCallServerBroadcast?.stop()
-                        //webCallServerSession?.disconnect()
                     } catch (ex: Exception){
                         ex.printStackTrace()
                     }

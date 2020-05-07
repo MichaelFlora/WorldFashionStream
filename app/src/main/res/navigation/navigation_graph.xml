@@ -119,7 +119,9 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/stay_as_is"
             app:popEnterAnim="@anim/stay_as_is"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/navigation_graph"
+            app:popUpToInclusive="true"/>
 
     </fragment>
 
@@ -169,7 +171,5 @@
         android:name="com.flora.michael.wfcstream.view.streambroadcasting.StreamBroadcastingFragment"
         android:label="@string/stream_broadcasting_fragment_title"
         tools:layout="@layout/stream_broadcasting_fragment"/>
-
-
 
 </navigation>

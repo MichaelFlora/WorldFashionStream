@@ -8,4 +8,8 @@
     <!-- Toolbar -->
     <color name="colorToolbar">#FFFFFF</color>
     <color name="colorToolbarIconTint">@color/colorPrimary</color>
+
+    <!-- Loadable content fragment -->
+    <color name="colorProgressbarWithHiddenContent">#00000000</color>
+    <color name="colorProgressbarWithVisibleContent">#33000000</color>
 </resources>
