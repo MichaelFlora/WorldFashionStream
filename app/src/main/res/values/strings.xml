@@ -23,6 +23,14 @@
     <string name="registration_fragment_password">Пароль</string>
     <string name="registration_fragment_confirm_password">Подтвердите пароль</string>
     <string name="registration_fragment_register_button">Регистрация</string>
+    <string name="registration_fragment_field_must_be_filled">Поле является обязательным.</string>
+    <string name="registration_fragment_illegal_symbols">Недопустимые символы.</string>
+    <string name="registration_fragment_login_min_symbols_count">Минимум %d символов.</string>
+    <string name="registration_fragment_login_max_symbols_count">Максимум %d символов.</string>
+    <string name="registration_fragment_user_name_min_symbols_count">Минимум %d символов.</string>
+    <string name="registration_fragment_user_name_max_symbols_count">Максимум %d символов.</string>
+    <string name="registration_fragment_password_max_symbols_count">Максимум %d символов.</string>
+    <string name="registration_fragment_passwords_do_not_match">Пароли не совпадают.</string>
 
     <!-- Home fragment -->
     <string name="home_fragment_active_channels">Активные каналы:</string>

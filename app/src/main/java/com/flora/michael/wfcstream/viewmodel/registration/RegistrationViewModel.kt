@@ -2,6 +2,7 @@ package com.flora.michael.wfcstream.viewmodel.registration
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.model.resultCode.authorization.LogInResultCode
 import com.flora.michael.wfcstream.model.resultCode.authorization.RegisterResultCode
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
@@ -107,7 +108,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(login == null || login.isEmpty()){
             if(isWithErrorMessage){
-                loginErrorMutable.value = "Поле является обязательным."
+                loginErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_field_must_be_filled)
             }
 
             return false
@@ -115,14 +116,14 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(!login.matches(LOGIN_REGULAR_EXPRESSION)){
             if(isWithErrorMessage) {
-                loginErrorMutable.value = "Недопустимые символы."
+                loginErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_illegal_symbols)
             }
             return false
         }
 
         if(login.length < MIN_LOGIN_LENGTH){
             if(isWithErrorMessage){
-                loginErrorMutable.value = "Минимум $MIN_LOGIN_LENGTH символов."
+                loginErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_login_min_symbols_count, MIN_LOGIN_LENGTH)
             }
 
             return false
@@ -130,7 +131,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(login.length > MAX_LOGIN_LENGTH){
             if(isWithErrorMessage) {
-                loginErrorMutable.value = "Максимум $MAX_LOGIN_LENGTH символов."
+                loginErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_login_max_symbols_count, MAX_LOGIN_LENGTH)
             }
 
             return false
@@ -145,7 +146,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(userName == null || userName.isEmpty()){
             if(isWithErrorMessage) {
-                userNameErrorMutable.value = "Поле является обязательным."
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_field_must_be_filled)
             }
 
             return false
@@ -153,7 +154,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(!userName.matches(USERNAME_REGULAR_EXPRESSION)){
             if(isWithErrorMessage) {
-                userNameErrorMutable.value = "Недопустимые символы."
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_illegal_symbols)
             }
 
             return false
@@ -161,7 +162,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(userName.length < MIN_USER_NAME_LENGTH){
             if(isWithErrorMessage) {
-                userNameErrorMutable.value = "Минимум $MIN_LOGIN_LENGTH символов."
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_user_name_min_symbols_count, MIN_USER_NAME_LENGTH)
             }
 
             return false
@@ -169,7 +170,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(userName.length > MAX_USER_NAME_LENGTH){
             if(isWithErrorMessage) {
-                userNameErrorMutable.value = "Максимум $MAX_LOGIN_LENGTH символов."
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_user_name_max_symbols_count, MAX_USER_NAME_LENGTH)
             }
 
             return false
@@ -184,7 +185,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(password == null || password.isEmpty()){
             if(isWithErrorMessage) {
-                passwordErrorMutable.value = "Поле является обязательным."
+                passwordErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_field_must_be_filled)
             }
 
             return false
@@ -192,7 +193,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(password.length > MAX_PASSWORD_LENGTH){
             if(isWithErrorMessage) {
-                passwordErrorMutable.value = "Максимум $MAX_PASSWORD_LENGTH символов."
+                passwordErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_password_max_symbols_count, MAX_PASSWORD_LENGTH)
             }
 
             return false
@@ -208,7 +209,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(password != confirmPassword){
             if(isWithErrorMessage) {
-                confirmPasswordErrorMutable.value = "Пароли не совпадают."
+                confirmPasswordErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_passwords_do_not_match)
             }
 
             return false
@@ -216,7 +217,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
         if(confirmPassword == null || confirmPassword.isEmpty()){
             if(isWithErrorMessage) {
-                confirmPasswordErrorMutable.value = "Поле является обязательным."
+                confirmPasswordErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_field_must_be_filled)
             }
 
             return false
