@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
 import com.flora.michael.wfcstream.repository.BroadcastsRepository
 import com.flora.michael.wfcstream.viewmodel.DestinationViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -45,7 +46,7 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
         isBroadcastOnlineMutable.value = isOnline
 
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
-            viewModelScope.launch {
+            GlobalScope.launch {
                 if(isOnline){
                     broadcastsRepository.broadcastStarted(authorizationToken)
                 } else{

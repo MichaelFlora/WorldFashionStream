@@ -14,6 +14,7 @@ import com.flashphoner.fpwcsapi.bean.StreamStatusInfo
 import com.flashphoner.fpwcsapi.constraints.AudioConstraints
 import com.flashphoner.fpwcsapi.constraints.Constraints
 import com.flashphoner.fpwcsapi.constraints.VideoConstraints
+import com.flashphoner.fpwcsapi.layout.PercentFrameLayout
 import com.flashphoner.fpwcsapi.session.*
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.view.LoadableContentFragment
@@ -28,6 +29,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     private var webCallServerSession: Session? = null
     private var webCallServerBroadcast: Stream? = null
 
+    private var broadcastRendererContainer: PercentFrameLayout? = null
     private var broadcastRenderer: SurfaceViewRenderer? = null
     private var channelNameTextView: TextView? = null
     private var broadcastTitle: TextView? = null
@@ -91,6 +93,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
     private fun findAllViews(){
         view?.run{
+            broadcastRendererContainer = findViewById(R.id.stream_renderer_container)
             broadcastRenderer = findViewById(R.id.stream_renderer)
             channelNameTextView = findViewById(R.id.stream_channel_name)
             broadcastTitle = findViewById(R.id.stream_title)
@@ -112,6 +115,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     }
 
     private fun initializeVideoRenderer(){
+        broadcastRendererContainer?.setPosition(0,0,100,100)
         broadcastRenderer?.apply{
             setZOrderMediaOverlay(true)
             setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
@@ -138,11 +142,11 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
         session.on(object: SessionEvent {
             override fun onAppData(data: Data?) {
-                // Nothing yet.
+
             }
 
             override fun onDisconnection(connection: Connection?) {
-                //isConnectedToWebCallServer = false
+
             }
 
             override fun onConnected(connection: Connection?) {
@@ -151,7 +155,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             }
 
             override fun onRegistered(connection: Connection?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
             }
 
         })

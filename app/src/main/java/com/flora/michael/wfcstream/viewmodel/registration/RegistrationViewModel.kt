@@ -235,7 +235,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
     }
 
     companion object{
-        const val MIN_LOGIN_LENGTH = 5
+        const val MIN_LOGIN_LENGTH = 7
         const val MAX_LOGIN_LENGTH = 15
 
         const val MIN_USER_NAME_LENGTH = 5

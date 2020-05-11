@@ -21,26 +21,20 @@ import com.flora.michael.wfcstream.viewmodel.streamBroadcasting.StreamBroadcasti
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
-import java.lang.Exception
 
 class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadcasting_fragment) {
     private val viewModel by viewModels<StreamBroadcastingViewModel>()
     private val logTag = this::class.java.simpleName
 
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
-        onBroadcastPublishing(broadcast, broadcastStatus)
-    }
-
-    private val onBroadcastPublishing: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
-        Toast.makeText(context, broadcastStatus.name, Toast.LENGTH_LONG)?.show()
-        if(broadcastStatus == StreamStatus.PUBLISHING){
-            lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            Toast.makeText(context, broadcastStatus.name, Toast.LENGTH_LONG).show()
+            if (broadcastStatus == StreamStatus.PUBLISHING) {
                 viewModel.notifyViewersAboutBroadcastState(isOnline = true)
-            }
-        } else if(broadcastStatus != StreamStatus.UNPUBLISHED){
-            lifecycleScope.launch(Dispatchers.Main) {
+            } else if (broadcastStatus == StreamStatus.UNPUBLISHED) {
                 viewModel.notifyViewersAboutBroadcastState(isOnline = false)
             }
         }
@@ -56,8 +50,6 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         super.onViewCreated(view, savedInstanceState)
         findAllViews()
         initializeAllViews()
-        webCallServerSession = createWebCallServerSession()
-        webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
         viewModel.loadDataFromServer()
     }
 
@@ -77,11 +69,13 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     }
 
     override fun onDestroy() {
-        try{
-            webCallServerBroadcast?.stop()
-            webCallServerSession?.disconnect()
-        } catch(ex: Exception){
-            ex.printStackTrace()
+        runBlocking{
+            try{
+                webCallServerBroadcast?.stop()
+                disconnectFromWebCallServer()
+            } catch(ex: Exception){
+                ex.printStackTrace()
+            }
         }
 
         super.onDestroy()
@@ -98,13 +92,17 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         initializeContentLoadingObservation()
         initializeVideoRenderer()
         initializeIsStreamOnlineObservation()
+        startStopBroadcastingButton?.isEnabled = false
     }
 
     private fun initializeContentLoadingObservation(){
         viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
             when{
                 isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
-                viewModel.isBroadcastInformationLoaded() -> hideLoadingProgressBar()
+                viewModel.isBroadcastInformationLoaded() -> {
+                    hideLoadingProgressBar()
+                    connectToWebCallServer()
+                }
                 else -> hideLoadingProgressBar(withError = true)
             }
         })
@@ -119,6 +117,15 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         }
     }
 
+    private fun connectToWebCallServer(){
+        webCallServerSession = createWebCallServerSession()
+        webCallServerSession?.connect(Connection())
+    }
+
+    private fun disconnectFromWebCallServer(){
+        webCallServerSession?.disconnect()
+    }
+
     private fun createWebCallServerSession(): Session{
         val sessionOptions = SessionOptions(getString(R.string.web_call_server_url)).apply{
             localRenderer = videoRenderer
@@ -128,15 +135,25 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
         session.on(object: SessionEvent{
             override fun onAppData(data: Data?) {
-                // Nothing yet.
+
             }
 
             override fun onDisconnection(connection: Connection?) {
-                //isConnectedToWebCallServer = false
+                lifecycleScope.launch(Dispatchers.Main){
+                    startStopBroadcastingButton?.isEnabled = false
+                }
+
+                if(viewModel.isBroadcastOnline.value == true){
+                    viewModel.notifyViewersAboutBroadcastState(isOnline = false)
+                }
             }
 
             override fun onConnected(connection: Connection?) {
-                //isConnectedToWebCallServer = true
+                lifecycleScope.launch(Dispatchers.Main){
+                    Log.i(logTag, "Connected to web call server")
+                    webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
+                    startStopBroadcastingButton?.isEnabled = true
+                }
             }
 
             override fun onRegistered(connection: Connection?) {
@@ -185,7 +202,6 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
             } else {
                 startStopBroadcastingButton?.text = context?.getString(R.string.stream_broadcasting_fragment_start_broadcast_button)
                 startStopBroadcastingButton?.setOnClickListener {
-                    webCallServerSession?.connect(Connection())
                     webCallServerBroadcast?.publish()
                 }
             }

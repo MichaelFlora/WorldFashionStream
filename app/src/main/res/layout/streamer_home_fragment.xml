@@ -51,14 +51,14 @@
         app:icon="@drawable/ic_videocam_white_24dp"
         app:iconGravity="textStart"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/streamer_home_fragment_log_out"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/streamer_home_fragment_content_horizontal_margin"
-        android:text="@string/streamer_home_fragment_log_out"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/streamer_home_fragment_start_broadcast" />
+<!--    <com.google.android.material.button.MaterialButton-->
+<!--        android:id="@+id/streamer_home_fragment_log_out"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="@dimen/streamer_home_fragment_content_horizontal_margin"-->
+<!--        android:text="@string/streamer_home_fragment_log_out"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/streamer_home_fragment_start_broadcast" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

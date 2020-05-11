@@ -2,11 +2,12 @@ package com.flora.michael.wfcstream.view.streamerhome
 
 import android.Manifest
 import android.os.Bundle
-import android.view.View
+import android.view.*
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.ui.onNavDestinationSelected
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.tools.checkPermissions
 import com.flora.michael.wfcstream.view.LoadableContentFragment
@@ -20,7 +21,16 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
     private var userNameTextView: TextView? = null
     private var broadcastNameEditText: TextInputEditText? = null
     private var startBroadcastButton: MaterialButton? = null
-    private var logOutButton: MaterialButton? = null
+    //private var logOutButton: MaterialButton? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        setHasOptionsMenu(true)
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,12 +44,29 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         super.onPause()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navigationController) ||
+                when(item.itemId){
+                    R.id.streamer_home_fragment_log_out -> {
+                        viewModel.logOut()
+                        true
+                    }
+                    else -> false
+                } ||
+                super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.streamer_home_menu, menu)
+    }
+
     private fun findAllViews(){
         view?.apply {
             userNameTextView = findViewById(R.id.streamer_home_fragment_user_name)
             broadcastNameEditText = findViewById(R.id.streamer_home_fragment_stream_title_edit_text)
             startBroadcastButton = findViewById(R.id.streamer_home_fragment_start_broadcast)
-            logOutButton = findViewById(R.id.streamer_home_fragment_log_out)
+            //logOutButton = findViewById(R.id.streamer_home_fragment_log_out)
         }
     }
 
@@ -48,7 +75,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         initializeUserNameTextView()
         initializeBroadcastNameEditText()
         initializeStartBroadcastButton()
-        initializeLogOutButton()
+        //initializeLogOutButton()
     }
 
     private fun initializeContentLoadingObservation(){
@@ -102,9 +129,9 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         }
     }
 
-    private fun initializeLogOutButton(){
-        logOutButton?.setOnClickListener {
-            viewModel.logOut()
-        }
-    }
+//    private fun initializeLogOutButton(){
+//        logOutButton?.setOnClickListener {
+//            viewModel.logOut()
+//        }
+//    }
 }

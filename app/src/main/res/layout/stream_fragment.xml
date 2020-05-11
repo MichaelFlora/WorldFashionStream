@@ -6,14 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <org.webrtc.SurfaceViewRenderer
-        android:id="@+id/stream_renderer"
+    <com.flashphoner.fpwcsapi.layout.PercentFrameLayout
+        android:id="@+id/stream_renderer_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#000000"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.35"/>
+        app:layout_constraintHeight_percent="0.35">
+
+        <org.webrtc.SurfaceViewRenderer
+            android:id="@+id/stream_renderer"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
+    </com.flashphoner.fpwcsapi.layout.PercentFrameLayout>
 
     <TextView
         android:id="@+id/stream_channel_name"
@@ -26,7 +34,7 @@
         android:maxLines="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stream_renderer"
+        app:layout_constraintTop_toBottomOf="@id/stream_renderer_container"
         tools:text="MichaelFlora"/>
 
     <TextView
