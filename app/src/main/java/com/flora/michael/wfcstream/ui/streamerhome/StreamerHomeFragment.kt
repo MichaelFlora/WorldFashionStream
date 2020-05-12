@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.streamerhome
+package com.flora.michael.wfcstream.ui.streamerhome
 
 import android.Manifest
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.ui.onNavDestinationSelected
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.tools.checkPermissions
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.viewmodel.streamerhome.StreamerHomeViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -75,7 +75,6 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         initializeUserNameTextView()
         initializeBroadcastNameEditText()
         initializeStartBroadcastButton()
-        //initializeLogOutButton()
     }
 
     private fun initializeContentLoadingObservation(){
@@ -128,10 +127,4 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
             }
         }
     }
-
-//    private fun initializeLogOutButton(){
-//        logOutButton?.setOnClickListener {
-//            viewModel.logOut()
-//        }
-//    }
 }

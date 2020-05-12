@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.login
+package com.flora.michael.wfcstream.ui.login
 
 import android.os.Bundle
 import android.text.Editable
@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.viewmodel.login.LogInViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText

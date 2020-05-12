@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.camandmicpermissions
+package com.flora.michael.wfcstream.ui.camandmicpermissions
 
 import android.Manifest
 import android.os.Bundle
@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.tools.checkPermission
 import com.flora.michael.wfcstream.tools.requestPermission
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.viewmodel.camandmicpermissions.CamAndMicPermissionsViewModel
 import com.google.android.material.button.MaterialButton
 

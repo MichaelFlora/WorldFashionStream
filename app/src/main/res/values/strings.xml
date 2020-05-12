@@ -99,5 +99,19 @@
     <string name="update_broadcast_name_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
     <string name="update_broadcast_name_result_code_unknown">Не удалось изменить название трансляции по неизвестной причине.</string>
 
+    <!-- Started watching broadcast result code -->
+    <string name="started_watching_broadcast_result_code_success">Вы начали просмотр трансляции.</string>
+    <string name="started_watching_broadcast_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="started_watching_broadcast_result_code_broadcast_does_not_exist">Данная трансляция не существует.</string>
+    <string name="started_watching_broadcast_result_code_broadcast_is_offline">Данная трансляция завершена.</string>
+    <string name="started_watching_broadcast_result_code_unknown">Не удалось начать просмотр трансляции по неизвестной причине.</string>
+
+    <!-- Stopped watching broadcast result code -->
+    <string name="stopped_watching_broadcast_result_code_success">Вы закончили просмотр трансляции.</string>
+    <string name="stopped_watching_broadcast_result_code_token_does_not_exist">Пользователь с указанным токеном доступа не существет.</string>
+    <string name="stopped_watching_broadcast_result_code_broadcast_does_not_exist">Данная трансляция не существует.</string>
+    <string name="stopped_watching_broadcast_result_code_broadcast_is_offline">Данная трансляция завершена.</string>
+    <string name="stopped_watching_broadcast_result_code_unknown">Не удалось закончить просмотр трансляции по неизвестной причине.</string>
+
     <string name="content_is_not_loaded">Произошло что-то странное…\n повторите попытку позже.</string>
 </resources>

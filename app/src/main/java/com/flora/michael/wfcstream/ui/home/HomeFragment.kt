@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.home
+package com.flora.michael.wfcstream.ui.home
 
 import android.os.Bundle
 import android.view.*
@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.view.LoadableContentFragment
-import com.flora.michael.wfcstream.view.streamerhome.adapters.ActiveChannelsListAdapter
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.home.adapters.ActiveChannelsListAdapter
 import com.flora.michael.wfcstream.viewmodel.home.HomeViewModel
 
 class HomeFragment: LoadableContentFragment(R.layout.home_fragment) {
@@ -68,7 +68,8 @@ class HomeFragment: LoadableContentFragment(R.layout.home_fragment) {
     private fun initializeContentLoadingObservation(){
         viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
             when{
-                isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
+                isContentLoading ->
+                    showLoadingProgressBar(withHiddenContent = true)
                 viewModel.isChannelsInformationLoaded() ->
                     hideLoadingProgressBar()
                 else ->
@@ -91,7 +92,6 @@ class HomeFragment: LoadableContentFragment(R.layout.home_fragment) {
 
     private fun initializeActiveChannelsRecyclerView(){
         activeChannelsRecyclerView?.apply {
-            //setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
             adapter = ActiveChannelsListAdapter(navigationController)
         }

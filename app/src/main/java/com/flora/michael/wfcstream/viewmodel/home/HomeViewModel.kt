@@ -26,16 +26,14 @@ class HomeViewModel(application: Application): DestinationViewModel(application)
     fun getChannelsInformationFromServer(){
         setLoadingOperationStarted()
 
-        viewModelScope.launch(Dispatchers.IO){
-            val activeChannelsLoadingJob = getActiveChannelsInformation()
-            val inactiveChannelsLoadingJob = getInactiveChannelsInformation()
+        viewModelScope.launch(Dispatchers.Main){
+            val activeChannelsLoadingJob = launch { getActiveChannelsInformation() }
+            val inactiveChannelsLoadingJob = launch { getInactiveChannelsInformation() }
 
             activeChannelsLoadingJob.join()
             inactiveChannelsLoadingJob.join()
 
-            withContext(Dispatchers.Main) {
-                setLoadingOperationFinished()
-            }
+            setLoadingOperationFinished()
         }
     }
 
@@ -45,29 +43,23 @@ class HomeViewModel(application: Application): DestinationViewModel(application)
 
     fun refreshChannelsInformation(){
         isRefreshingInformationMutable.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val activeChannelsLoadingJob = getActiveChannelsInformation()
-            val inactiveChannelsLoadingJob = getInactiveChannelsInformation()
+        viewModelScope.launch(Dispatchers.Main) {
+            val activeChannelsLoadingJob = launch { getActiveChannelsInformation() }
+            val inactiveChannelsLoadingJob = launch { getInactiveChannelsInformation() }
 
             activeChannelsLoadingJob.join()
             inactiveChannelsLoadingJob.join()
 
-            withContext(Dispatchers.Main){
-                isRefreshingInformationMutable.value = false
-            }
+            isRefreshingInformationMutable.value = false
         }
     }
 
-    private fun getActiveChannelsInformation() = viewModelScope.launch {
-        //setLoadingOperationStarted()
+    private suspend fun getActiveChannelsInformation() = withContext(Dispatchers.Main) {
         activeChannelsMutable.value = broadcastsRepository.getLiveBroadcasts()
-        //setLoadingOperationFinished()
     }
 
-    private fun getInactiveChannelsInformation() = viewModelScope.launch{
-        //setLoadingOperationStarted()
+    private suspend fun getInactiveChannelsInformation() = withContext(Dispatchers.Main){
         // TODO: implement when needed
-        //setLoadingOperationFinished()
     }
 
 

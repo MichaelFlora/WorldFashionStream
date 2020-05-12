@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/destination_home"
-        android:name="com.flora.michael.wfcstream.view.home.HomeFragment"
+        android:name="com.flora.michael.wfcstream.ui.home.HomeFragment"
         android:label="@string/home_fragment_title"
         tools:layout="@layout/home_fragment">
 
@@ -44,7 +44,7 @@
 
     <fragment
         android:id="@+id/destination_stream"
-        android:name="com.flora.michael.wfcstream.view.stream.StreamFragment"
+        android:name="com.flora.michael.wfcstream.ui.stream.StreamFragment"
         android:label="@string/broadcast_fragment_title"
         tools:layout="@layout/stream_fragment">
 
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/destination_welcome"
-        android:name="com.flora.michael.wfcstream.view.welcome.WelcomeFragment"
+        android:name="com.flora.michael.wfcstream.ui.welcome.WelcomeFragment"
         android:label="@string/welcome_fragment_title"
         tools:layout="@layout/welcome_fragment">
 
@@ -91,7 +91,7 @@
 
     <fragment
         android:id="@+id/destination_log_in"
-        android:name="com.flora.michael.wfcstream.view.login.LogInFragment"
+        android:name="com.flora.michael.wfcstream.ui.login.LogInFragment"
         android:label="@string/log_in_fragment_title"
         tools:layout="@layout/log_in_fragment">
 
@@ -109,7 +109,7 @@
 
     <fragment
         android:id="@+id/destination_registration"
-        android:name="com.flora.michael.wfcstream.view.registration.RegistrationFragment"
+        android:name="com.flora.michael.wfcstream.ui.registration.RegistrationFragment"
         android:label="@string/registration_fragment_title"
         tools:layout="@layout/registration_fragment">
 
@@ -127,7 +127,7 @@
 
     <fragment
         android:id="@+id/destination_streamer_home"
-        android:name="com.flora.michael.wfcstream.view.streamerhome.StreamerHomeFragment"
+        android:name="com.flora.michael.wfcstream.ui.streamerhome.StreamerHomeFragment"
         android:label="@string/streamer_home_fragment_title"
         tools:layout="@layout/streamer_home_fragment">
 
@@ -151,7 +151,7 @@
 
     <fragment
         android:id="@+id/destination_cam_and_mic_permissions"
-        android:name="com.flora.michael.wfcstream.view.camandmicpermissions.CamAndMicPermissionsFragment"
+        android:name="com.flora.michael.wfcstream.ui.camandmicpermissions.CamAndMicPermissionsFragment"
         android:label="@string/cam_and_mic_permissions_fragment_title"
         tools:layout="@layout/cam_and_mic_permissions_fragment">
 
@@ -168,7 +168,7 @@
 
     <fragment
         android:id="@+id/destination_stream_broadcasting"
-        android:name="com.flora.michael.wfcstream.view.streambroadcasting.StreamBroadcastingFragment"
+        android:name="com.flora.michael.wfcstream.ui.streambroadcasting.StreamBroadcastingFragment"
         android:label="@string/stream_broadcasting_fragment_title"
         tools:layout="@layout/stream_broadcasting_fragment"/>
 

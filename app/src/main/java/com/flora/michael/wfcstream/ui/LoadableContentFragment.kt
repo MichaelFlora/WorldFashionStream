@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view
+package com.flora.michael.wfcstream.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

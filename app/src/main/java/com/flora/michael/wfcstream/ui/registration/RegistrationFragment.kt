@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.registration
+package com.flora.michael.wfcstream.ui.registration
 
 import android.os.Bundle
 import android.text.Editable
@@ -9,9 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.model.resultCode.authorization.RegisterResultCode
-import com.flora.michael.wfcstream.view.LoadableContentFragment
-import com.flora.michael.wfcstream.view.login.LogInFragmentDirections
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.viewmodel.registration.RegistrationViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText

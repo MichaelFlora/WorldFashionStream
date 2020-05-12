@@ -1,10 +1,11 @@
-package com.flora.michael.wfcstream.view.stream
+package com.flora.michael.wfcstream.ui.stream
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.flashphoner.fpwcsapi.Flashphoner
 import com.flashphoner.fpwcsapi.bean.Connection
@@ -17,7 +18,8 @@ import com.flashphoner.fpwcsapi.constraints.VideoConstraints
 import com.flashphoner.fpwcsapi.layout.PercentFrameLayout
 import com.flashphoner.fpwcsapi.session.*
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
+import com.flora.michael.wfcstream.view.ViewersCountView
 import com.flora.michael.wfcstream.viewmodel.stream.StreamViewModel
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
@@ -33,6 +35,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     private var broadcastRenderer: SurfaceViewRenderer? = null
     private var channelNameTextView: TextView? = null
     private var broadcastTitle: TextView? = null
+    private var viewersCountView: ViewersCountView? = null
 
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
 
@@ -73,11 +76,16 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         } catch(ex: IllegalStateException){
             ex.printStackTrace()
         }
+
+        if(webCallServerBroadcast?.status == StreamStatus.PLAYING){
+            viewModel.notifyUserStartedWatchingBroadcast()
+        }
     }
 
     override fun onPause() {
         super.onPause()
         broadcastRenderer?.release()
+        viewModel.notifyUserStoppedWatchingBroadcast()
     }
 
     override fun onDestroy() {
@@ -97,6 +105,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             broadcastRenderer = findViewById(R.id.stream_renderer)
             channelNameTextView = findViewById(R.id.stream_channel_name)
             broadcastTitle = findViewById(R.id.stream_title)
+            viewersCountView = findViewById(R.id.stream_fragment_viewers_count_view)
         }
     }
 
@@ -104,6 +113,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         initializeChannelNameTextView()
         initializeBroadcastTitleTextView()
         initializeVideoRenderer()
+        initializeViewersCountView()
     }
 
     private fun initializeChannelNameTextView(){
@@ -122,6 +132,12 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             setMirror(true)
             requestLayout()
         }
+    }
+
+    private fun initializeViewersCountView(){
+        viewModel.viewersCount.observe(viewLifecycleOwner, Observer{ viewersCount ->
+            viewersCountView?.viewersCount = viewersCount ?: 0
+        })
     }
 
     private fun connectToWebCallServer(){

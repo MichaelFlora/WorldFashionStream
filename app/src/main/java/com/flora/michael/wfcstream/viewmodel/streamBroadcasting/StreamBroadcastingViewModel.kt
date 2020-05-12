@@ -7,8 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
 import com.flora.michael.wfcstream.repository.BroadcastsRepository
 import com.flora.michael.wfcstream.viewmodel.DestinationViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -19,13 +18,19 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
     private val broadcastsRepository: BroadcastsRepository by instance()
     private val authorizationRepository: AuthorizationRepository by instance()
 
+    private val viewersCountMutable = MutableLiveData(0)
     private val isBroadcastOnlineMutable = MutableLiveData<Boolean>()
     private val broadcastNameMutable = MutableLiveData<String>()
-    private val userIdMutable = MutableLiveData<Long>()
+    private val broadcastIdMutable = MutableLiveData<Long>()
 
+    val viewersCount: LiveData<Int> = viewersCountMutable
     val isBroadcastOnline: LiveData<Boolean> = isBroadcastOnlineMutable
     val broadcastName: LiveData<String> = broadcastNameMutable
-    val userId: LiveData<Long> = userIdMutable
+    val broadcastId: LiveData<Long> = broadcastIdMutable
+
+    init{
+        startRefreshViewersCount()
+    }
 
     fun loadDataFromServer(){
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
@@ -35,9 +40,26 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
             viewModelScope.launch {
                 val broadcastInformation = broadcastsRepository.getOwnBroadcastInformation(authorizationToken)
                 isBroadcastOnlineMutable.value = broadcastInformation?.isOnline
-                userIdMutable.value = broadcastInformation?.userId
+                broadcastIdMutable.value = broadcastInformation?.broadcastId
 
                 setLoadingOperationFinished()
+            }
+        }
+    }
+
+    private fun startRefreshViewersCount(){
+        viewModelScope.launch(Dispatchers.Default) {
+            while(isActive){
+                delay(5000)
+                authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
+                    broadcastId.value?.let{ broadcastId: Long ->
+                        val viewersCount = broadcastsRepository.getBroadcastInformation(authorizationToken, broadcastId)?.viewersCount
+
+                        if(viewersCount != null){
+                            viewersCountMutable.value = viewersCount
+                        }
+                    }
+                }
             }
         }
     }
@@ -48,15 +70,15 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
             GlobalScope.launch {
                 if(isOnline){
-                    broadcastsRepository.broadcastStarted(authorizationToken)
+                    broadcastsRepository.notifyBroadcastStarted(authorizationToken)
                 } else{
-                    broadcastsRepository.broadcastStopped(authorizationToken)
+                    broadcastsRepository.notifyBroadcastStopped(authorizationToken)
                 }
             }
         }
     }
 
     fun isBroadcastInformationLoaded(): Boolean{
-        return isBroadcastOnline.value != null && userId.value != null
+        return isBroadcastOnline.value != null && broadcastId.value != null
     }
 }

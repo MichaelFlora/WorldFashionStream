@@ -30,7 +30,7 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <activity
-            android:name=".view.MainActivity"
+            android:name=".ui.MainActivity"
             android:configChanges="orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

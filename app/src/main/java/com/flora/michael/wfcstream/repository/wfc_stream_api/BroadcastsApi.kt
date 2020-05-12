@@ -27,7 +27,7 @@ interface BroadcastsApi {
     @POST("get_own_broadcast_information")
     suspend fun getOwnBroadcastInformation(
         @Field("access_token") accessToken: String
-    ): Response<OwnBroadcastInformation>
+    ): Response<BroadcastInformation>
 
     @FormUrlEncoded
     @POST("update_broadcast_name")
@@ -35,4 +35,25 @@ interface BroadcastsApi {
         @Field("access_token") accessToken: String,
         @Field("broadcast_name") newBroadcastName: String
     ): Response<UpdateBroadcastNameResponse>
+
+    @FormUrlEncoded
+    @POST("started_watching_broadcast")
+    suspend fun startedWatchingBroadcast(
+        @Field("access_token") accessToken: String,
+        @Field("broadcast_id") broadcast_id: Long
+    ): Response<StartedWatchingBroadcastResponse>
+
+    @FormUrlEncoded
+    @POST("stopped_watching_broadcast")
+    suspend fun stoppedWatchingBroadcast(
+        @Field("access_token") accessToken: String,
+        @Field("broadcast_id") broadcast_id: Long
+    ): Response<StoppedWatchingBroadcastResponse>
+
+    @FormUrlEncoded
+    @POST("get_broadcast_information")
+    suspend fun getBroadcastInformation(
+        @Field("access_token") accessToken: String,
+        @Field("broadcast_id") broadcast_id: Long
+    ): Response<BroadcastInformation>
 }

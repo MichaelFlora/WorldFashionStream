@@ -1,10 +1,10 @@
-package com.flora.michael.wfcstream.view.welcome
+package com.flora.michael.wfcstream.ui.welcome
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.viewmodel.welcome.WelcomeViewModel
 import com.google.android.material.button.MaterialButton
 

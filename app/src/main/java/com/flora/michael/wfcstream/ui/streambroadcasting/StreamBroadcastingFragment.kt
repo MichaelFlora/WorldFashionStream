@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.view.streambroadcasting
+package com.flora.michael.wfcstream.ui.streambroadcasting
 
 import android.os.Bundle
 import android.util.Log
@@ -16,7 +16,8 @@ import com.flashphoner.fpwcsapi.constraints.Constraints
 import com.flashphoner.fpwcsapi.constraints.VideoConstraints
 import com.flashphoner.fpwcsapi.session.*
 import com.flora.michael.wfcstream.R
-import com.flora.michael.wfcstream.view.LoadableContentFragment
+import com.flora.michael.wfcstream.ui.LoadableContentFragment
+import com.flora.michael.wfcstream.view.ViewersCountView
 import com.flora.michael.wfcstream.viewmodel.streamBroadcasting.StreamBroadcastingViewModel
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +41,7 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         }
     }
 
+    private var viewersCountView: ViewersCountView? = null
     private var videoRenderer: SurfaceViewRenderer? = null
     private var startStopBroadcastingButton: MaterialButton? = null
 
@@ -83,6 +85,7 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     private fun findAllViews(){
         view?.apply{
+            viewersCountView = findViewById(R.id.stream_broadcasting_fragment_viewers_count_view)
             videoRenderer = findViewById(R.id.stream_broadcasting_fragment_video_renderer)
             startStopBroadcastingButton = findViewById(R.id.stream_broadcasting_fragment_start_stop_broadcasting_button)
         }
@@ -90,6 +93,7 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     private fun initializeAllViews(){
         initializeContentLoadingObservation()
+        initializeViewersCountView()
         initializeVideoRenderer()
         initializeIsStreamOnlineObservation()
         startStopBroadcastingButton?.isEnabled = false
@@ -108,10 +112,16 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         })
     }
 
+    private fun initializeViewersCountView(){
+        viewModel.viewersCount.observe(viewLifecycleOwner, Observer{ viewersCount ->
+            viewersCountView?.viewersCount = viewersCount ?: 0
+        })
+    }
+
     private fun initializeVideoRenderer(){
         videoRenderer?.apply{
             setZOrderMediaOverlay(true)
-            setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT)
+            setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL)
             setMirror(true)
             requestLayout()
         }
@@ -168,7 +178,7 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     private fun createWebCallServerBroadcast(webCallServerSession: Session?): Stream?{
         var broadcast: Stream? = null
 
-        viewModel.userId.value?.let{ broadcastId ->
+        viewModel.broadcastId.value?.let{ broadcastId ->
             val streamOptions = StreamOptions(broadcastId.toString())
 
             streamOptions.constraints = Constraints(
