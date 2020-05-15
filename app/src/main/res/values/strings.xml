@@ -6,7 +6,7 @@
 
     <!-- Welcome fragment -->
     <string name="welcome_fragment_title">Добро пожаловать</string>
-    <string name="welcome_fragment_welcome_message">Добро пожаловать на WFS!</string>
+    <string name="welcome_fragment_welcome_message">Добро пожаловать на %s!</string>
     <string name="welcome_fragment_log_in_button">Войти</string>
     <string name="welcome_fragment_sign_in_button">Регистрация</string>
 
