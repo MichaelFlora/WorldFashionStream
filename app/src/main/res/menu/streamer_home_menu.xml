@@ -4,10 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:id="@+id/streamer_home_fragment_log_out"
-        android:title="@string/streamer_home_fragment_log_out"
-        app:iconTint="@color/colorToolbarIconTint"
+    <item
+        android:id="@+id/streamer_home_menu_overflow"
+        android:icon="@drawable/ic_more_vertical_white_24dp"
         android:orderInCategory="1"
-        app:showAsAction="always"
-        tools:iconTint="@color/colorToolbar"/>
+        android:title="@string/streamer_home_menu_overflow_item"
+        app:showAsAction="ifRoom"
+        app:iconTint="@color/colorToolbarIconTint"
+        tools:iconTint="@color/colorToolbar">
+
+        <menu>
+
+            <item
+                android:id="@+id/streamer_home_menu_log_out"
+                android:icon="@drawable/ic_door_18dp"
+                android:orderInCategory="1"
+                android:title="@string/streamer_home_menu_log_out"
+                app:iconTint="@color/colorToolbarIconTint"
+                app:showAsAction="always|withText"
+                tools:iconTint="@color/colorToolbar" />
+
+        </menu>
+
+    </item>
+
 </menu>

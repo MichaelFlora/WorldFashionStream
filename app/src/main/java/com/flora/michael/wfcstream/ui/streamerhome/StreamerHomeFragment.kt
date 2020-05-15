@@ -47,7 +47,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navigationController) ||
                 when(item.itemId){
-                    R.id.streamer_home_fragment_log_out -> {
+                    R.id.streamer_home_menu_log_out -> {
                         viewModel.logOut()
                         true
                     }
