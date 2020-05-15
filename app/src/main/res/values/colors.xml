@@ -12,4 +12,7 @@
     <!-- Loadable content fragment -->
     <color name="colorProgressbarWithHiddenContent">#00000000</color>
     <color name="colorProgressbarWithVisibleContent">#33000000</color>
+
+    <!-- Launcher icon -->
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>
