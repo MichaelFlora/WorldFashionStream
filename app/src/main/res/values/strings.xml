@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WFCStream</string>
+    <string name="app_name">WFS</string>
 
     <!-- Web Call Server -->
     <string name="web_call_server_url">wss://194.67.90.21:8443</string>
