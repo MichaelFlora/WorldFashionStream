@@ -47,7 +47,10 @@
     <string name="streamer_home_fragment_title">Настройки трансляции</string>
     <string name="streamer_home_fragment_stream_name">Название трансляции</string>
     <string name="streamer_home_fragment_start_stream">Начать трансляцию</string>
-    <string name="streamer_home_fragment_log_out">Выйти</string>
+
+    <!-- Streamer home menu -->
+    <string name="streamer_home_menu_overflow_item">Ещё</string>
+    <string name="streamer_home_menu_log_out">Выйти</string>
 
     <!-- Camera and microphone permissions fragment -->
     <string name="cam_and_mic_permissions_fragment_title">Разрешения</string>
