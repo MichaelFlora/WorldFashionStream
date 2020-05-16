@@ -1,6 +1,5 @@
 package com.flora.michael.wfcstream.tools
 
-import android.util.Log
 import okhttp3.FormBody
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -32,14 +31,29 @@ fun RequestBody.addExtraFieldToFormDataRequestBody(
     fieldName: String,
     fieldValue: String
 ): RequestBody? {
-
-    val bodyBuilder = MultipartBody.Builder().setType(MultipartBody.FORM)
+    val bodyBuilder = FormBody.Builder()
     val formBody = this as FormBody
+
+    bodyBuilder.add(fieldName, fieldValue)
+
+    for (i in 0 until formBody.size()) {
+        bodyBuilder.add(formBody.encodedName(i), formBody.encodedValue(i))
+    }
+
+    return bodyBuilder.build()
+}
+
+fun RequestBody.addExtraFieldToMultipartRequestBody(
+    fieldName: String,
+    fieldValue: String
+): RequestBody? {
+    val formBody = this as MultipartBody
+    val bodyBuilder = MultipartBody.Builder().setType(formBody.type())
 
     bodyBuilder.addFormDataPart(fieldName, fieldValue)
 
     for (i in 0 until formBody.size()) {
-        bodyBuilder.addFormDataPart(formBody.encodedName(i), formBody.encodedValue(i))
+        bodyBuilder.addPart(formBody.part(i))
     }
 
     return bodyBuilder.build()
