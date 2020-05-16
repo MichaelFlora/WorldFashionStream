@@ -4,28 +4,30 @@ import com.flora.michael.wfcstream.model.response.authorization.LogInResponse
 import com.flora.michael.wfcstream.model.response.authorization.LogOutResponse
 import com.flora.michael.wfcstream.model.response.authorization.RegisterResponse
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
 
 interface AuthorizationApi{
 
-    @FormUrlEncoded
+    @Multipart
     @POST("login")
     suspend fun logIn(
-        @Field("login") login: String,
-        @Field("password") password: String
+        @Part("login") login: String,
+        @Part("password") password: String
     ): Response<LogInResponse>
 
-    @FormUrlEncoded
+    @Multipart
     @POST("register")
     suspend fun register(
-        @Field("login") login: String,
-        @Field("password") password: String,
-        @Field("user_name") userName: String
+        @Part("login") login: String,
+        @Part("password") password: String,
+        @Part("user_name") userName: String
     ): Response<RegisterResponse>
 
-    @FormUrlEncoded
+    @Multipart
     @POST("logout")
     suspend fun logOut(
-        @Field("access_token") accessToken: String
+        @Part("access_token") accessToken: String
     ): Response<LogOutResponse>
 }

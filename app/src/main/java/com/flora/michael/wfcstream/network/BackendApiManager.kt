@@ -7,18 +7,16 @@ import com.flora.michael.wfcstream.BuildConfig
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
 import com.flora.michael.wfcstream.repository.PreferencesRepository
 import com.flora.michael.wfcstream.repository.SessionRepository
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.security.KeyStore
@@ -28,7 +26,7 @@ import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.CertificateFactory
 import java.security.cert.X509Certificate
-import java.util.HashSet
+import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
@@ -58,12 +56,6 @@ class BackendApiManager private constructor(private val baseURL: String, overrid
     private val sessionOutdatedInterceptor: Interceptor = Interceptor { chain ->
         var response = chain.proceed(chain.request())
         val request = chain.request()
-
-//        if(!response.isSuccessful && response.code() == 419){
-//            GlobalScope.launch {
-//                sessionRepository.updateSessionToken()
-//            }
-//        }
 
         var currentAttempt = 0
 
@@ -125,8 +117,10 @@ class BackendApiManager private constructor(private val baseURL: String, overrid
         //.initializeWithBuilderData()
 
     private var secureSessionOkHttpClient: OkHttpClient = defaultOkHttpClient.newBuilder()
-        .apply{ interceptors().add(0, sessionOutdatedInterceptor) }
-        .addInterceptor(secureSessionPostInterceptor)
+        .apply{
+            interceptors().add(0, sessionOutdatedInterceptor)
+            interceptors().add(1, secureSessionPostInterceptor)
+        }
 
         .build()
         //.initializeWithBuilderData()
@@ -134,6 +128,7 @@ class BackendApiManager private constructor(private val baseURL: String, overrid
     private val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(API_BASE_URL)
             .client(defaultOkHttpClient)
+            .addConverterFactory(ScalarsConverterFactory.create()) // replaces quoted strings with plain ones in post requests
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
