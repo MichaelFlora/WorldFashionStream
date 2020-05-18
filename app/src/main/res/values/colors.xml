@@ -15,4 +15,7 @@
 
     <!-- Launcher icon -->
     <color name="ic_launcher_background">#FFFFFF</color>
+
+    <!-- Viewers counter color -->
+    <color name="colorViewersCounter">#FF0E0E</color>
 </resources>

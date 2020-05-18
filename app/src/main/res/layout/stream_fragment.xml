@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="@id/stream_fragment_viewers_count_view"
         tools:text="Всем привет!"/>
 
-    <com.flora.michael.wfcstream.view.ViewersCountView
+    <com.flora.michael.wfcstream.view.ViewersCounterView
         android:id="@+id/stream_fragment_viewers_count_view"
         android:layout_width="0dp"
         android:layout_height="30dp"
@@ -60,7 +60,8 @@
         app:layout_constraintTop_toBottomOf="@id/stream_channel_name"
         app:layout_constraintBottom_toTopOf="@id/stream_chat_coming_soon_message"
         app:layout_constraintDimensionRatio="3"
-        app:viewersCount="0"/>
+        app:viewersCount="0"
+        app:viewersTint="@color/colorViewersCounter"/>
 
     <TextView
         android:id="@+id/stream_chat_coming_soon_message"

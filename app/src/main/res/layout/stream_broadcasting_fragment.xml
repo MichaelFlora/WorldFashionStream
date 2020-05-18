@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:enabled="true"/>
 
-    <com.flora.michael.wfcstream.view.ViewersCountView
+    <com.flora.michael.wfcstream.view.ViewersCounterView
         android:id="@+id/stream_broadcasting_fragment_viewers_count_view"
         android:layout_width="0dp"
         android:layout_height="30dp"
@@ -44,6 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintDimensionRatio="3"
-        app:viewersCount="0"/>
+        app:viewersCount="0"
+        app:viewersTint="@color/colorViewersCounter"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
