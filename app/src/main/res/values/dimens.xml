@@ -10,6 +10,10 @@
     <dimen name="registration_fragment_content_horizontal_margin">40dp</dimen>
     <dimen name="header_text_size_1">25sp</dimen>
     <dimen name="streamer_home_fragment_content_horizontal_margin">20dp</dimen>
-    <dimen name="cam_and_mic_permissions_fragment_content_horizontal_margin">20dp</dimen>
-    <dimen name="stream_broadcasting_fragment_content_horizontal_margin">20dp</dimen>
+    <dimen name="cam_and_mic_permissions_fragment_content_horizontal_margin">20dp</dimen>\
+
+    <!-- Stream broadcasting fragment -->
+    <dimen name="stream_broadcasting_fragment_window_horizontal_margin">20dp</dimen>
+    <dimen name="stream_broadcasting_fragment_window_bottom_margin">25dp</dimen>
+    <dimen name="stream_broadcasting_fragment_buttons_vertical_margin">10dp</dimen>
 </resources>
