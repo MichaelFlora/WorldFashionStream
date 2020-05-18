@@ -52,6 +52,10 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         super.onViewCreated(view, savedInstanceState)
         findAllViews()
         initializeAllViews()
+    }
+
+    override fun onStart() {
+        super.onStart()
         viewModel.loadDataFromServer()
     }
 
@@ -70,17 +74,16 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         videoRenderer?.release()
     }
 
-    override fun onDestroy() {
+    override fun onStop() {
         runBlocking{
             try{
-                webCallServerBroadcast?.stop()
+                unpublishBroadcast()
                 disconnectFromWebCallServer()
             } catch(ex: Exception){
                 ex.printStackTrace()
             }
         }
-
-        super.onDestroy()
+        super.onStop()
     }
 
     private fun findAllViews(){
@@ -96,7 +99,6 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         initializeViewersCountView()
         initializeVideoRenderer()
         initializeIsStreamOnlineObservation()
-        startStopBroadcastingButton?.isEnabled = false
     }
 
     private fun initializeContentLoadingObservation(){
@@ -161,7 +163,6 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
             override fun onConnected(connection: Connection?) {
                 lifecycleScope.launch(Dispatchers.Main){
                     Log.i(logTag, "Connected to web call server")
-                    webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
                     startStopBroadcastingButton?.isEnabled = true
                 }
             }
@@ -197,22 +198,32 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         return broadcast
     }
 
+    private fun publishBroadcast(){
+        webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
+        webCallServerBroadcast?.publish()
+    }
+
+    private fun unpublishBroadcast(){
+        try{
+            webCallServerBroadcast?.stop()
+        } catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+        webCallServerBroadcast = null
+    }
+
     private fun initializeIsStreamOnlineObservation(){
         viewModel.isBroadcastOnline.observe(viewLifecycleOwner, Observer{ isStreamOnline: Boolean? ->
             if(isStreamOnline == true){
                 startStopBroadcastingButton?.text = context?.getString(R.string.stream_broadcasting_fragment_stop_broadcast_button)
                 startStopBroadcastingButton?.setOnClickListener {
-                    try{
-                        webCallServerBroadcast?.stop()
-                    } catch (ex: Exception){
-                        ex.printStackTrace()
-                    }
-
+                    unpublishBroadcast()
                 }
             } else {
                 startStopBroadcastingButton?.text = context?.getString(R.string.stream_broadcasting_fragment_start_broadcast_button)
                 startStopBroadcastingButton?.setOnClickListener {
-                    webCallServerBroadcast?.publish()
+                    publishBroadcast()
                 }
             }
         })
