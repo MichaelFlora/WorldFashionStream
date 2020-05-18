@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@id/home_live_broadcasts_list_item_channel_name"
         tools:text="Hello world!"/>
 
-    <com.flora.michael.wfcstream.view.ViewersCountView
+    <com.flora.michael.wfcstream.view.ViewersCounterView
         android:id="@+id/home_live_broadcasts_list_item_viewers_count_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -42,7 +42,8 @@
         app:layout_constraintTop_toBottomOf="@id/home_live_broadcasts_list_item_channel_name"
         app:layout_constraintBottom_toTopOf="@id/home_live_broadcasts_list_item_bottom_divider"
         app:layout_constraintDimensionRatio="3"
-        app:viewersCount="0"/>
+        app:viewersCount="0"
+        app:viewersTint="@color/colorViewersCounter"/>
 
     <View
         android:id="@+id/home_live_broadcasts_list_item_bottom_divider"

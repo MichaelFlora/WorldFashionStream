@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.model.response.broadcast.BroadcastInformation
 import com.flora.michael.wfcstream.ui.home.HomeFragmentDirections
-import com.flora.michael.wfcstream.view.ViewersCountView
+import com.flora.michael.wfcstream.view.ViewersCounterView
 
 class ActiveChannelsListAdapter(
     private val navigationController: NavController
@@ -35,7 +35,7 @@ class ActiveChannelsListAdapter(
 
             channelName.text = activeChannel.userName
             broadcastTitle.text = activeChannel.broadcastName
-            viewersCountView.viewersCount = activeChannel.viewersCount
+            viewersCounterView.viewersCount = activeChannel.viewersCount
 
             setOnClickListener {
                 val action = HomeFragmentDirections.actionDestinationHomeToDestinationStream(activeChannel.broadcastId, activeChannel.userName, activeChannel.broadcastName)
@@ -54,7 +54,7 @@ class ActiveChannelsListAdapter(
 
         val channelName: TextView by lazy { activeChannelContainer.findViewById<TextView>(R.id.home_live_broadcasts_list_item_channel_name) }
         val broadcastTitle: TextView by lazy { activeChannelContainer.findViewById<TextView>(R.id.home_live_broadcasts_list_item_broadcast_name) }
-        val viewersCountView: ViewersCountView by lazy { activeChannelContainer.findViewById<ViewersCountView>(R.id.home_live_broadcasts_list_item_viewers_count_view) }
+        val viewersCounterView: ViewersCounterView by lazy { activeChannelContainer.findViewById<ViewersCounterView>(R.id.home_live_broadcasts_list_item_viewers_count_view) }
 
         fun setOnClickListener(onClickListener: (ConstraintLayout) -> Unit){
             activeChannelContainer.setOnClickListener {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="ViewersCountView">
+    <declare-styleable name="ViewersCounterView">
 
         <attr name="viewersIcon" format="reference"/>
         <attr name="viewersCount" format="integer"/>
