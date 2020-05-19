@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -43,6 +44,8 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     private var viewersCounterView: ViewersCounterView? = null
     private var videoRenderer: SurfaceViewRenderer? = null
+    private var switchCameraStateButton: MaterialButton? = null
+    private var switchMicrophoneStateButton: MaterialButton? = null
     private var startStopBroadcastingButton: MaterialButton? = null
 
     private var webCallServerSession: Session? = null
@@ -76,12 +79,8 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     override fun onStop() {
         runBlocking{
-            try{
-                unpublishBroadcast()
-                disconnectFromWebCallServer()
-            } catch(ex: Exception){
-                ex.printStackTrace()
-            }
+            unpublishBroadcast()
+            disconnectFromWebCallServer()
         }
         super.onStop()
     }
@@ -90,7 +89,9 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         view?.apply{
             viewersCounterView = findViewById(R.id.stream_broadcasting_fragment_viewers_count_view)
             videoRenderer = findViewById(R.id.stream_broadcasting_fragment_video_renderer)
-            startStopBroadcastingButton = findViewById(R.id.stream_broadcasting_fragment_start_stop_broadcasting_button)
+            switchCameraStateButton = findViewById(R.id.stream_broadcasting_fragment_switch_camera_state_button)
+            switchMicrophoneStateButton = findViewById(R.id.stream_broadcasting_fragment_switch_microphone_state_button)
+            startStopBroadcastingButton = findViewById(R.id.stream_broadcasting_fragment_switch_broadcast_state_button)
         }
     }
 
@@ -99,6 +100,8 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         initializeViewersCountView()
         initializeVideoRenderer()
         initializeIsStreamOnlineObservation()
+        initializeCameraStateObservation()
+        initializeMicrophoneStateObservation()
     }
 
     private fun initializeContentLoadingObservation(){
@@ -198,9 +201,90 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         return broadcast
     }
 
+    private fun initializeIsStreamOnlineObservation(){
+        viewModel.isBroadcastOnline.observe(viewLifecycleOwner, Observer{ isStreamOnline: Boolean? ->
+            changeBroadcastButtonIcon(isStreamOnline ?: false)
+            changeCameraButtonVisibility(isStreamOnline ?: false)
+            changeMicrophoneButtonVisibility(isStreamOnline ?: false)
+            changeBroadcastButtonAction(isStreamOnline ?: false)
+        })
+    }
+
+    private fun initializeCameraStateObservation(){
+        viewModel.isCameraActive.observe(viewLifecycleOwner, Observer{ isActive ->
+            setBroadcastCameraState(isActive)
+            changeCameraButtonIcon(isActive)
+            changeCameraButtonAction(isActive)
+        })
+    }
+
+    private fun initializeMicrophoneStateObservation(){
+        viewModel.isMicrophoneActive.observe(viewLifecycleOwner, Observer{ isActive ->
+            setBroadcastAudioState(isActive)
+            changeMicrophoneButtonIcon(isActive)
+            changeMicrophoneButtonAction(isActive)
+        })
+    }
+
+    private fun setBroadcastCameraState(isActive: Boolean){
+        if(isActive){
+            webCallServerBroadcast?.unmuteVideo()
+            return
+        }
+
+        webCallServerBroadcast?.muteVideo()
+    }
+
+    private fun setBroadcastAudioState(isActive: Boolean){
+        if(isActive){
+            webCallServerBroadcast?.unmuteAudio()
+            return
+        }
+
+        webCallServerBroadcast?.muteAudio()
+    }
+
+    private fun changeCameraButtonAction(isCameraActive: Boolean){
+        switchCameraStateButton?.setOnClickListener {
+            viewModel.changeCameraState(!isCameraActive)
+        }
+    }
+
+    private fun changeMicrophoneButtonAction(isMicrophoneActive: Boolean){
+        switchMicrophoneStateButton?.setOnClickListener {
+            viewModel.changeMicrophoneState(!isMicrophoneActive)
+        }
+    }
+
+    private fun changeBroadcastButtonAction(isBroadcastActive: Boolean){
+        when(isBroadcastActive){
+            true -> startStopBroadcastingButton?.setOnClickListener {
+                unpublishBroadcast()
+            }
+            else -> startStopBroadcastingButton?.setOnClickListener {
+                publishBroadcast()
+            }
+        }
+    }
+
+    private fun changeCameraButtonVisibility(isVisible: Boolean){
+        switchCameraStateButton?.visibility = when(isVisible){
+            true -> View.VISIBLE
+            else -> View.GONE
+        }
+    }
+
+    private fun changeMicrophoneButtonVisibility(isVisible: Boolean){
+        switchMicrophoneStateButton?.visibility = when(isVisible){
+            true -> View.VISIBLE
+            else -> View.GONE
+        }
+    }
+
     private fun publishBroadcast(){
         webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
         webCallServerBroadcast?.publish()
+        setBroadcastAudioState(viewModel.isMicrophoneActive.value ?: false)
     }
 
     private fun unpublishBroadcast(){
@@ -213,19 +297,33 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
         webCallServerBroadcast = null
     }
 
-    private fun initializeIsStreamOnlineObservation(){
-        viewModel.isBroadcastOnline.observe(viewLifecycleOwner, Observer{ isStreamOnline: Boolean? ->
-            if(isStreamOnline == true){
-                startStopBroadcastingButton?.text = context?.getString(R.string.stream_broadcasting_fragment_stop_broadcast_button)
-                startStopBroadcastingButton?.setOnClickListener {
-                    unpublishBroadcast()
-                }
-            } else {
-                startStopBroadcastingButton?.text = context?.getString(R.string.stream_broadcasting_fragment_start_broadcast_button)
-                startStopBroadcastingButton?.setOnClickListener {
-                    publishBroadcast()
-                }
+    private fun changeCameraButtonIcon(isCameraActive: Boolean){
+        context?.let {
+            switchCameraStateButton?.icon = if(isCameraActive){
+                ContextCompat.getDrawable(it, R.drawable.ic_videocam_off_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_videocam_white_24dp)
             }
-        })
+        }
+    }
+
+    private fun changeMicrophoneButtonIcon(isMicActive: Boolean){
+        context?.let {
+            switchMicrophoneStateButton?.icon = if(isMicActive){
+                ContextCompat.getDrawable(it, R.drawable.ic_mic_off_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_mic_on_white_24dp)
+            }
+        }
+    }
+
+    private fun changeBroadcastButtonIcon(isBroadcastLive: Boolean){
+        context?.let {
+            startStopBroadcastingButton?.icon = if(isBroadcastLive){
+                ContextCompat.getDrawable(it, R.drawable.ic_stop_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_play_arrow_white_24dp)
+            }
+        }
     }
 }

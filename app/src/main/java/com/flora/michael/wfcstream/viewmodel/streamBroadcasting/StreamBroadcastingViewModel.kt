@@ -20,11 +20,15 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
 
     private val viewersCountMutable = MutableLiveData(0)
     private val isBroadcastOnlineMutable = MutableLiveData<Boolean>()
+    private val isMicrophoneActiveMutable = MutableLiveData<Boolean>(true)
+    private val isCameraActiveMutable = MutableLiveData<Boolean>(true)
     private val broadcastNameMutable = MutableLiveData<String>()
     private val broadcastIdMutable = MutableLiveData<Long>()
 
     val viewersCount: LiveData<Int> = viewersCountMutable
     val isBroadcastOnline: LiveData<Boolean> = isBroadcastOnlineMutable
+    val isMicrophoneActive: LiveData<Boolean> = isMicrophoneActiveMutable
+    val isCameraActive: LiveData<Boolean> = isCameraActiveMutable
     val broadcastName: LiveData<String> = broadcastNameMutable
     val broadcastId: LiveData<Long> = broadcastIdMutable
 
@@ -45,6 +49,14 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
                 setLoadingOperationFinished()
             }
         }
+    }
+
+    fun changeCameraState(isActive: Boolean){
+        isCameraActiveMutable.value = isActive
+    }
+
+    fun changeMicrophoneState(isActive: Boolean){
+        isMicrophoneActiveMutable.value = isActive
     }
 
     private fun startRefreshViewersCount(){

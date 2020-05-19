@@ -24,16 +24,38 @@
     </com.flashphoner.fpwcsapi.layout.PercentFrameLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/stream_broadcasting_fragment_start_stop_broadcasting_button"
+        style="@style/AppTheme.MaterialComponents.Button.IconOnly.Round"
+        android:id="@+id/stream_broadcasting_fragment_switch_camera_state_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/stream_broadcasting_fragment_content_horizontal_margin"
-        android:layout_marginBottom="20dp"
-        android:text="@string/stream_broadcasting_fragment_stop_broadcast_button"
+        android:layout_marginHorizontal="@dimen/stream_broadcasting_fragment_window_horizontal_margin"
+        android:layout_marginBottom="@dimen/stream_broadcasting_fragment_buttons_vertical_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/stream_broadcasting_fragment_switch_microphone_state_button"
+        app:icon="@drawable/ic_videocam_white_24dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        style="@style/AppTheme.MaterialComponents.Button.IconOnly.Round"
+        android:id="@+id/stream_broadcasting_fragment_switch_microphone_state_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/stream_broadcasting_fragment_window_horizontal_margin"
+        android:layout_marginBottom="@dimen/stream_broadcasting_fragment_buttons_vertical_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/stream_broadcasting_fragment_switch_broadcast_state_button"
+        app:icon="@drawable/ic_mic_on_white_24dp"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/stream_broadcasting_fragment_switch_broadcast_state_button"
+        style="@style/AppTheme.MaterialComponents.Button.IconOnly.Round"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/stream_broadcasting_fragment_window_horizontal_margin"
+        android:layout_marginBottom="@dimen/stream_broadcasting_fragment_window_bottom_margin"
         android:enabled="false"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:icon="@drawable/ic_play_arrow_white_24dp"
         tools:enabled="true"/>
 
     <com.flora.michael.wfcstream.view.ViewersCounterView
