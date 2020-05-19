@@ -23,6 +23,49 @@
 
     </com.flashphoner.fpwcsapi.layout.PercentFrameLayout>
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/stream_fragment_player_buttons_container_top_guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.27"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/stream_fragment_player_buttons_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/player_buttons_container_background"
+        app:layout_constraintStart_toStartOf="@id/stream_renderer_container"
+        app:layout_constraintEnd_toEndOf="@id/stream_renderer_container"
+        app:layout_constraintTop_toTopOf="@id/stream_fragment_player_buttons_container_top_guideline"
+        app:layout_constraintBottom_toBottomOf="@id/stream_renderer_container">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/AppTheme.MaterialComponents.Button.IconOnly.Transparent"
+            android:id="@+id/stream_fragment_broadcast_state_button"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1"
+            app:icon="@drawable/ic_pause_white_24dp"
+            app:iconTint="@color/colorBroadcastPlayerButton"/>
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            style="@style/AppTheme.MaterialComponents.Button.IconOnly.Transparent"-->
+<!--            android:id="@+id/stream_fragment_sound_button"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintDimensionRatio="1"-->
+<!--            app:icon="@drawable/ic_volume_off_white_24dp"-->
+<!--            app:iconTint="@color/colorBroadcastPlayerButton"/>-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/stream_channel_name"
         android:layout_width="0dp"

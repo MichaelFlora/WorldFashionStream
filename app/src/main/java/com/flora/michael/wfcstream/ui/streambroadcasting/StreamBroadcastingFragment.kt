@@ -79,12 +79,8 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     override fun onStop() {
         runBlocking{
-            try{
-                unpublishBroadcast()
-                disconnectFromWebCallServer()
-            } catch(ex: Exception){
-                ex.printStackTrace()
-            }
+            unpublishBroadcast()
+            disconnectFromWebCallServer()
         }
         super.onStop()
     }

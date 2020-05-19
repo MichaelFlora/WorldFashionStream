@@ -23,6 +23,11 @@ class StreamViewModel(application: Application): AndroidViewModel(application), 
     private val broadcastsRepository: BroadcastsRepository by instance()
 
     private val viewersCountMutable = MutableLiveData(0)
+    private val isBroadcastPlayingMutable = MutableLiveData<Boolean>(false)
+    private val isSoundEnabledMutable = MutableLiveData<Boolean>(false)
+
+    val isBroadcastPlaying: LiveData<Boolean> = isBroadcastPlayingMutable
+    val isSoundEnabled: LiveData<Boolean> = isSoundEnabledMutable
 
     val viewersCount: LiveData<Int> = viewersCountMutable
 
@@ -75,5 +80,13 @@ class StreamViewModel(application: Application): AndroidViewModel(application), 
                 }
             }
         }
+    }
+
+    fun changeBroadcastState(isPlaying: Boolean){
+        isBroadcastPlayingMutable.value = isPlaying
+    }
+
+    fun changeSoundState(isEnabled: Boolean){
+        isSoundEnabledMutable.value = isEnabled
     }
 }

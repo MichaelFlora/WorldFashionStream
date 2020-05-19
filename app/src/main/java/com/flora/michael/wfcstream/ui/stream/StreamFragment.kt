@@ -1,11 +1,18 @@
 package com.flora.michael.wfcstream.ui.stream
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.flashphoner.fpwcsapi.Flashphoner
 import com.flashphoner.fpwcsapi.bean.Connection
@@ -21,21 +28,52 @@ import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.view.ViewersCounterView
 import com.flora.michael.wfcstream.viewmodel.stream.StreamViewModel
+import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
 class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     private val viewModel by viewModels<StreamViewModel>()
     private val broadcastNavigationArguments: StreamFragmentArgs by navArgs()
+    private val playerButtonsFadeOutAfterMilliseconds = 3000L
 
     private var webCallServerSession: Session? = null
     private var webCallServerBroadcast: Stream? = null
+
+    private val handler = Handler()
+    private val playerButtonsFadeOutRunnable = Runnable {
+        playerButtonsContainer?.startAnimation(fadeOutAnimation)
+    }
+
+    private val fadeOutAnimation: Animation? by lazy {
+        context?.let { contextNotNull ->
+            AnimationUtils.loadAnimation(contextNotNull, R.anim.fade_out_fast).apply {
+                setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(p0: Animation?) {}
+
+                    override fun onAnimationEnd(p0: Animation?) {
+                        playerButtonsContainer?.visibility = View.GONE
+                    }
+
+                    override fun onAnimationStart(p0: Animation?) {}
+
+                })
+            }
+        }
+    }
 
     private var broadcastRendererContainer: PercentFrameLayout? = null
     private var broadcastRenderer: SurfaceViewRenderer? = null
     private var channelNameTextView: TextView? = null
     private var broadcastTitle: TextView? = null
     private var viewersCounterView: ViewersCounterView? = null
+
+    private var playerButtonsContainer: ConstraintLayout? = null
+    private var broadcastStateButton: MaterialButton? = null
+    private var soundStateButton: MaterialButton? = null
 
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
 
@@ -71,6 +109,9 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
     override fun onResume() {
         super.onResume()
+
+        showPlayerButtons()
+
         try{
             broadcastRenderer?.init(Flashphoner.context, null)
         } catch(ex: IllegalStateException){
@@ -88,15 +129,16 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         viewModel.notifyUserStoppedWatchingBroadcast()
     }
 
-    override fun onDestroy() {
-        try{
-            webCallServerBroadcast?.stop()
-            disconnectFromWebCallServer()
-        } catch(ex: Exception){
-            ex.printStackTrace()
+    override fun onStop() {
+        runBlocking {
+            try{
+                stopBroadcast()
+                disconnectFromWebCallServer()
+            } catch(ex: Exception){
+                ex.printStackTrace()
+            }
         }
-
-        super.onDestroy()
+        super.onStop()
     }
 
     private fun findAllViews(){
@@ -106,6 +148,10 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             channelNameTextView = findViewById(R.id.stream_channel_name)
             broadcastTitle = findViewById(R.id.stream_title)
             viewersCounterView = findViewById(R.id.stream_fragment_viewers_count_view)
+
+            playerButtonsContainer = findViewById(R.id.stream_fragment_player_buttons_container)
+            broadcastStateButton = findViewById(R.id.stream_fragment_broadcast_state_button)
+            soundStateButton = findViewById(R.id.stream_fragment_sound_button)
         }
     }
 
@@ -113,7 +159,10 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         initializeChannelNameTextView()
         initializeBroadcastTitleTextView()
         initializeVideoRenderer()
+        initializePlayerButtonsContainer()
         initializeViewersCountView()
+        initializeBroadcastStateObservation()
+        initializeSoundStateObservation()
     }
 
     private fun initializeChannelNameTextView(){
@@ -132,6 +181,28 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             setMirror(true)
             requestLayout()
         }
+
+        broadcastRendererContainer?.setOnClickListener {
+            showPlayerButtons()
+        }
+    }
+
+    private fun initializePlayerButtonsContainer(){
+        playerButtonsContainer?.setOnClickListener {
+            showPlayerButtons()
+        }
+
+        for(child in playerButtonsContainer?.children ?: emptySequence()){
+            child.setOnClickListener {
+                showPlayerButtons()
+            }
+        }
+    }
+
+    private fun showPlayerButtons(){
+        playerButtonsContainer?.visibility = View.VISIBLE
+        handler.removeCallbacks(playerButtonsFadeOutRunnable)
+        handler.postDelayed(playerButtonsFadeOutRunnable, playerButtonsFadeOutAfterMilliseconds)
     }
 
     private fun initializeViewersCountView(){
@@ -166,8 +237,9 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             }
 
             override fun onConnected(connection: Connection?) {
-                getWebCallServerBroadcast()
-                webCallServerBroadcast?.play()
+                lifecycleScope.launch(Dispatchers.Main){
+                    changeBroadcastState(viewModel.isBroadcastPlaying.value ?: false)
+                }
             }
 
             override fun onRegistered(connection: Connection?) {
@@ -179,7 +251,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         return session
     }
 
-    private fun getWebCallServerBroadcast(){
+    private fun createWebCallServerBroadcast(webCallServerSession: Session?): Stream?{
         val streamOptions = StreamOptions(viewModel.broadcastId.toString())
 
         streamOptions.constraints = Constraints(
@@ -190,9 +262,100 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             }
         )
 
-        webCallServerBroadcast = webCallServerSession?.createStream(streamOptions)
+        val broadcast: Stream? = webCallServerSession?.createStream(streamOptions)
 
-        webCallServerBroadcast?.on(onBroadcastStatus)
+        broadcast?.on(onBroadcastStatus)
+
+        return broadcast
+    }
+
+    private fun initializeBroadcastStateObservation(){
+        viewModel.isBroadcastPlaying.observe(viewLifecycleOwner, Observer{ isPlaying: Boolean? ->
+            changeBroadcastStateButtonIcon(isPlaying ?: false)
+            changeBroadcastStateButtonAction(isPlaying ?: false)
+        })
+    }
+
+    private fun initializeSoundStateObservation(){
+        viewModel.isSoundEnabled.observe(viewLifecycleOwner, Observer{ isEnabled: Boolean? ->
+            changeSoundStateButtonIcon(isEnabled ?: false)
+            changeSoundStateButtonAction(isEnabled ?: false)
+        })
+    }
+
+    private fun changeBroadcastStateButtonAction(isBroadcastActive: Boolean){
+        broadcastStateButton?.setOnClickListener {
+            changeBroadcastState(isBroadcastActive)
+        }
+    }
+
+    private fun changeSoundStateButtonAction(isSoundEnabled: Boolean){
+        soundStateButton?.setOnClickListener {
+            changeSoundState(isSoundEnabled)
+        }
+    }
+
+    private fun changeBroadcastState(isBroadcastActive: Boolean){
+        viewModel.changeBroadcastState(!isBroadcastActive)
+
+        when (isBroadcastActive) {
+            true -> {
+                stopBroadcast()
+            }
+            else -> {
+                playBroadcast()
+            }
+        }
+    }
+
+    private fun changeSoundState(isSoundEnabled: Boolean){
+        viewModel.changeSoundState(!isSoundEnabled)
+
+        when (isSoundEnabled) {
+            true -> {
+                webCallServerBroadcast?.muteAudio()
+            }
+            else -> {
+                webCallServerBroadcast?.unmuteAudio()
+            }
+        }
+    }
+
+    private fun playBroadcast(){
+        stopBroadcast()
+        webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
+        webCallServerBroadcast?.play()
+        changeSoundState(viewModel.isSoundEnabled.value ?: false)
+    }
+
+    private fun stopBroadcast(){
+        try{
+            webCallServerBroadcast?.stop()
+        } catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+        webCallServerBroadcast = null
+    }
+
+    private fun changeBroadcastStateButtonIcon(isBroadcastPlaying: Boolean){
+        context?.let {
+            broadcastStateButton?.icon = if(isBroadcastPlaying){
+                ContextCompat.getDrawable(it, R.drawable.ic_pause_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_play_arrow_white_24dp)
+            }
+        }
+    }
+
+    private fun changeSoundStateButtonIcon(isSoundEnabled: Boolean){
+        context?.let {
+            soundStateButton?.icon = if(isSoundEnabled){
+                ContextCompat.getDrawable(it, R.drawable.ic_volume_off_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_volume_up_white_24dp)
+            }
+        }
     }
 
 }

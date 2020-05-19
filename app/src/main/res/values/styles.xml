@@ -18,6 +18,10 @@
         <item name="iconPadding">0dp</item>
     </style>
 
+    <style name="AppTheme.MaterialComponents.Button.IconOnly.Transparent" parent="AppTheme.MaterialComponents.Button.IconOnly">
+        <item name="android:backgroundTint">#00000000</item>
+    </style>
+
     <style name="AppTheme.MaterialComponents.Button.IconOnly.Round" parent="AppTheme.MaterialComponents.Button.IconOnly">
         <item name="cornerRadius">50dp</item>
         <item name="layout_constraintDimensionRatio">1</item>

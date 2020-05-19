@@ -18,4 +18,7 @@
 
     <!-- Viewers counter color -->
     <color name="colorViewersCounter">#FF0E0E</color>
+
+    <!-- Stream player buttons -->
+    <color name="colorBroadcastPlayerButton">#FFFFFF</color>
 </resources>
