@@ -151,7 +151,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
             playerButtonsContainer = findViewById(R.id.stream_fragment_player_buttons_container)
             broadcastStateButton = findViewById(R.id.stream_fragment_broadcast_state_button)
-            soundStateButton = findViewById(R.id.stream_fragment_sound_button)
+            //soundStateButton = findViewById(R.id.stream_fragment_sound_button)
         }
     }
 
