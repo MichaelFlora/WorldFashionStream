@@ -300,9 +300,9 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     private fun changeCameraButtonIcon(isCameraActive: Boolean){
         context?.let {
             switchCameraStateButton?.icon = if(isCameraActive){
-                ContextCompat.getDrawable(it, R.drawable.ic_videocam_off_white_24dp)
-            } else{
                 ContextCompat.getDrawable(it, R.drawable.ic_videocam_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_videocam_off_white_24dp)
             }
         }
     }
@@ -310,9 +310,9 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     private fun changeMicrophoneButtonIcon(isMicActive: Boolean){
         context?.let {
             switchMicrophoneStateButton?.icon = if(isMicActive){
-                ContextCompat.getDrawable(it, R.drawable.ic_mic_off_white_24dp)
-            } else{
                 ContextCompat.getDrawable(it, R.drawable.ic_mic_on_white_24dp)
+            } else{
+                ContextCompat.getDrawable(it, R.drawable.ic_mic_off_white_24dp)
             }
         }
     }
