@@ -256,10 +256,7 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
         streamOptions.constraints = Constraints(
             AudioConstraints(),
-            VideoConstraints().apply {
-                videoFps = 60
-                setResolution(720, 1280)
-            }
+            VideoConstraints()
         )
 
         val broadcast: Stream? = webCallServerSession?.createStream(streamOptions)
