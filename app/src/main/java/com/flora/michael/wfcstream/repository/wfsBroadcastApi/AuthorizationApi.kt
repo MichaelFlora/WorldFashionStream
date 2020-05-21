@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.repository.wfc_stream_api
+package com.flora.michael.wfcstream.repository.wfsBroadcastApi
 
 import com.flora.michael.wfcstream.model.response.authorization.LogInResponse
 import com.flora.michael.wfcstream.model.response.authorization.LogOutResponse

@@ -182,8 +182,8 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
     private fun createWebCallServerBroadcast(webCallServerSession: Session?): Stream?{
         var broadcast: Stream? = null
 
-        viewModel.broadcastId.value?.let{ broadcastId ->
-            val streamOptions = StreamOptions(broadcastId.toString())
+        viewModel.channelId.value?.let{ channelId ->
+            val streamOptions = StreamOptions(channelId.toString())
 
             streamOptions.constraints = Constraints(
                 AudioConstraints(),

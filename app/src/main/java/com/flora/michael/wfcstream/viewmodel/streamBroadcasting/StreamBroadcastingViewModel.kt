@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
-import com.flora.michael.wfcstream.repository.BroadcastsRepository
+import com.flora.michael.wfcstream.repository.ChannelsRepository
 import com.flora.michael.wfcstream.viewmodel.DestinationViewModel
 import kotlinx.coroutines.*
 import org.kodein.di.Kodein
@@ -15,7 +15,7 @@ import org.kodein.di.generic.instance
 
 class StreamBroadcastingViewModel(application: Application): DestinationViewModel(application), KodeinAware{
     override val kodein: Kodein by closestKodein()
-    private val broadcastsRepository: BroadcastsRepository by instance()
+    private val channelsRepository: ChannelsRepository by instance()
     private val authorizationRepository: AuthorizationRepository by instance()
 
     private val viewersCountMutable = MutableLiveData(0)
@@ -23,14 +23,14 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
     private val isMicrophoneActiveMutable = MutableLiveData<Boolean>(true)
     private val isCameraActiveMutable = MutableLiveData<Boolean>(true)
     private val broadcastNameMutable = MutableLiveData<String>()
-    private val broadcastIdMutable = MutableLiveData<Long>()
+    private val channelIdMutable = MutableLiveData<Long>()
 
     val viewersCount: LiveData<Int> = viewersCountMutable
     val isBroadcastOnline: LiveData<Boolean> = isBroadcastOnlineMutable
     val isMicrophoneActive: LiveData<Boolean> = isMicrophoneActiveMutable
     val isCameraActive: LiveData<Boolean> = isCameraActiveMutable
     val broadcastName: LiveData<String> = broadcastNameMutable
-    val broadcastId: LiveData<Long> = broadcastIdMutable
+    val channelId: LiveData<Long> = channelIdMutable
 
     init{
         startRefreshViewersCount()
@@ -42,9 +42,9 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
             setLoadingOperationStarted()
 
             viewModelScope.launch {
-                val broadcastInformation = broadcastsRepository.getOwnBroadcastInformation(authorizationToken)
+                val broadcastInformation = channelsRepository.getOwnChannelInformation(authorizationToken)
                 isBroadcastOnlineMutable.value = broadcastInformation?.isOnline
-                broadcastIdMutable.value = broadcastInformation?.broadcastId
+                channelIdMutable.value = broadcastInformation?.channelId
 
                 setLoadingOperationFinished()
             }
@@ -64,8 +64,8 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
             while(isActive){
                 delay(5000)
                 authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
-                    broadcastId.value?.let{ broadcastId: Long ->
-                        val viewersCount = broadcastsRepository.getBroadcastInformation(authorizationToken, broadcastId)?.viewersCount
+                    channelId.value?.let{ channelId: Long ->
+                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.viewersCount
 
                         if(viewersCount != null){
                             viewersCountMutable.value = viewersCount
@@ -82,15 +82,15 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
             GlobalScope.launch {
                 if(isOnline){
-                    broadcastsRepository.notifyBroadcastStarted(authorizationToken)
+                    channelsRepository.notifyBroadcastStarted(authorizationToken)
                 } else{
-                    broadcastsRepository.notifyBroadcastStopped(authorizationToken)
+                    channelsRepository.notifyBroadcastStopped(authorizationToken)
                 }
             }
         }
     }
 
     fun isBroadcastInformationLoaded(): Boolean{
-        return isBroadcastOnline.value != null && broadcastId.value != null
+        return isBroadcastOnline.value != null && channelId.value != null
     }
 }

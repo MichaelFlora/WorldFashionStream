@@ -1,19 +1,19 @@
 package com.flora.michael.wfcstream.repository
 
-import com.flora.michael.wfcstream.model.response.broadcast.BroadcastInformation
-import com.flora.michael.wfcstream.model.resultCode.broadcast.*
-import com.flora.michael.wfcstream.repository.wfc_stream_api.BroadcastsApi
+import com.flora.michael.wfcstream.model.response.channels.ChannelInformation
+import com.flora.michael.wfcstream.model.resultCode.channels.*
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.ChannelsApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
-class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
+class ChannelsRepository(private val channelsApi: ChannelsApi) {
 
     suspend fun notifyBroadcastStarted(accessToken: String): StartBroadcastResultCode = withContext(Dispatchers.IO){
         var resultCode: StartBroadcastResultCode = StartBroadcastResultCode.DefaultError
 
         try{
-            val response = broadcastsApi.notifyBroadcastStarted(accessToken)
+            val response = channelsApi.notifyBroadcastStarted(accessToken)
 
             if(response.isSuccessful){
                 response.body()?.let{ startStreamResponse ->
@@ -31,7 +31,7 @@ class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
         var resultCodeCode: StopBroadcastResultCode = StopBroadcastResultCode.DefaultError
 
         try{
-            val response = broadcastsApi.notifyBroadcastStopped(accessToken)
+            val response = channelsApi.notifyBroadcastStopped(accessToken)
 
             if(response.isSuccessful){
                 response.body()?.let{ stopStreamResponse ->
@@ -45,43 +45,43 @@ class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
         resultCodeCode
     }
 
-    suspend fun getLiveBroadcasts(): List<BroadcastInformation> = withContext(Dispatchers.IO){
-        var liveBroadcasts: List<BroadcastInformation> = emptyList()
+    suspend fun getLiveChannels(): List<ChannelInformation> = withContext(Dispatchers.IO){
+        var liveChannels: List<ChannelInformation> = emptyList()
 
         try{
-            val response = broadcastsApi.getLiveBroadcasts()
+            val response = channelsApi.getLiveChannels()
 
             if(response.isSuccessful){
-                liveBroadcasts = response.body() ?: emptyList()
+                liveChannels = response.body() ?: emptyList()
             }
         } catch(ex: HttpException){
             ex.printStackTrace()
         }
 
-        liveBroadcasts
+        liveChannels
     }
 
-    suspend fun getOwnBroadcastInformation(accessToken: String): BroadcastInformation? = withContext(Dispatchers.IO){
-        var ownBroadcastInformation: BroadcastInformation? = null
+    suspend fun getOwnChannelInformation(accessToken: String): ChannelInformation? = withContext(Dispatchers.IO){
+        var ownChannelInformation: ChannelInformation? = null
 
         try{
-            val response = broadcastsApi.getOwnBroadcastInformation(accessToken)
+            val response = channelsApi.getOwnChannelInformation(accessToken)
 
             if(response.isSuccessful){
-                ownBroadcastInformation = response.body()
+                ownChannelInformation = response.body()
             }
         } catch(ex: HttpException){
             ex.printStackTrace()
         }
 
-        ownBroadcastInformation
+        ownChannelInformation
     }
 
     suspend fun updateBroadcastName(accessToken: String, newBroadcastName: String): UpdateBroadcastNameResultCode? = withContext(Dispatchers.IO){
         var resultCode: UpdateBroadcastNameResultCode = UpdateBroadcastNameResultCode.DefaultError
 
         try{
-            val response = broadcastsApi.updateBroadcastName(accessToken, newBroadcastName)
+            val response = channelsApi.updateBroadcastName(accessToken, newBroadcastName)
 
             if(response.isSuccessful){
                 response.body()?.let{ updateBroadcastNameResponse ->
@@ -95,11 +95,11 @@ class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
         resultCode
     }
 
-    suspend fun startedWatchingBroadcast(accessToken: String, broadcastId: Long): StartedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
+    suspend fun startedWatchingBroadcast(accessToken: String, channelId: Long): StartedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
         var resultCode: StartedWatchingBroadcastResultCode = StartedWatchingBroadcastResultCode.DefaultError
 
         try{
-            val response = broadcastsApi.startedWatchingBroadcast(accessToken, broadcastId)
+            val response = channelsApi.startedWatchingBroadcast(accessToken, channelId)
 
             if(response.isSuccessful){
                 response.body()?.let{ startedWatchingBroadcastResponse ->
@@ -113,11 +113,11 @@ class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
         resultCode
     }
 
-    suspend fun stoppedWatchingBroadcast(accessToken: String, broadcastId: Long): StoppedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
+    suspend fun stoppedWatchingBroadcast(accessToken: String, channelId: Long): StoppedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
         var resultCode: StoppedWatchingBroadcastResultCode = StoppedWatchingBroadcastResultCode.DefaultError
 
         try{
-            val response = broadcastsApi.stoppedWatchingBroadcast(accessToken, broadcastId)
+            val response = channelsApi.stoppedWatchingBroadcast(accessToken, channelId)
 
             if(response.isSuccessful){
                 response.body()?.let{ stoppedWatchingBroadcastResponse ->
@@ -131,20 +131,20 @@ class BroadcastsRepository(private val broadcastsApi: BroadcastsApi) {
         resultCode
     }
 
-    suspend fun getBroadcastInformation(accessToken: String, broadcastId: Long): BroadcastInformation? = withContext(Dispatchers.IO){
-        var broadcastInformation: BroadcastInformation? = null
+    suspend fun getChannelInformation(accessToken: String, channelId: Long): ChannelInformation? = withContext(Dispatchers.IO){
+        var channelInformation: ChannelInformation? = null
 
         try{
-            val response = broadcastsApi.getBroadcastInformation(accessToken, broadcastId)
+            val response = channelsApi.getChannelInformation(accessToken, channelId)
 
             if(response.isSuccessful){
-                broadcastInformation = response.body()
+                channelInformation = response.body()
             }
         } catch(ex: HttpException){
             ex.printStackTrace()
         }
 
-        broadcastInformation
+        channelInformation
     }
 
 }

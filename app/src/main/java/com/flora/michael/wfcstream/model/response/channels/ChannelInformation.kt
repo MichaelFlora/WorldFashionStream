@@ -1,10 +1,10 @@
-package com.flora.michael.wfcstream.model.response.broadcast
+package com.flora.michael.wfcstream.model.response.channels
 
 import com.google.gson.annotations.SerializedName
 
-data class BroadcastInformation (
-    @SerializedName("broadcast_id")
-    val broadcastId: Long,
+data class ChannelInformation (
+    @SerializedName("channel_id")
+    val channelId: Long,
 
     @SerializedName("user_name")
     val userName: String,

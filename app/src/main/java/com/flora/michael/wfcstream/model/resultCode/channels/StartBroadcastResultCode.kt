@@ -1,10 +1,10 @@
-package com.flora.michael.wfcstream.model.resultCode.broadcast
+package com.flora.michael.wfcstream.model.resultCode.channels
 
 import androidx.annotation.StringRes
 import com.flora.michael.wfcstream.R
 import com.google.gson.annotations.SerializedName
 
-enum class StoppedWatchingBroadcastResultCode(
+enum class StartBroadcastResultCode(
     @StringRes
     val description: Int
 ){
@@ -13,11 +13,9 @@ enum class StoppedWatchingBroadcastResultCode(
     @SerializedName("1")
     TokenDoesNotExist(R.string.notify_broadcast_started_result_code_token_does_not_exist),
     @SerializedName("2")
-    BroadcastDoesNotExist(R.string.notify_broadcast_started_result_code_broadcast_is_already_published),
+    BroadcastIsAlreadyLaunched(R.string.notify_broadcast_started_result_code_broadcast_is_already_published),
     @SerializedName("3")
-    BroadcastIsOffline(R.string.notify_broadcast_started_result_code_broadcast_is_already_published),
-    @SerializedName("4")
     Unknown(R.string.notify_broadcast_started_result_code_unknown),
-    @SerializedName("5")
+    @SerializedName("4")
     DefaultError(R.string.base_result_code_default_error_message);
 }

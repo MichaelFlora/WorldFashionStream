@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.ui.streamerhome
+package com.flora.michael.wfcstream.ui.profile
 
 import android.Manifest
 import android.os.Bundle
@@ -11,12 +11,12 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.tools.checkPermissions
 import com.flora.michael.wfcstream.ui.LoadableContentFragment
-import com.flora.michael.wfcstream.viewmodel.streamerhome.StreamerHomeViewModel
+import com.flora.michael.wfcstream.viewmodel.profile.ProfileViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
-class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragment) {
-    private val viewModel by viewModels<StreamerHomeViewModel>()
+class ProfileFragment: LoadableContentFragment(R.layout.profile_fragment) {
+    private val viewModel by viewModels<ProfileViewModel>()
 
     private var userNameTextView: TextView? = null
     private var broadcastNameEditText: TextInputEditText? = null
@@ -36,7 +36,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         super.onViewCreated(view, savedInstanceState)
         findAllViews()
         initializeAllViews()
-        viewModel.getBroadcastInformationFromServer()
+        viewModel.getChannelInformationFromServer()
     }
 
     override fun onPause() {
@@ -81,7 +81,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
             when{
                 isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
-                viewModel.isBroadcastInformationLoaded() ->
+                viewModel.isChannelInformationLoaded() ->
                     hideLoadingProgressBar()
                 else ->
                     hideLoadingProgressBar(withError = true)
@@ -109,7 +109,7 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
     }
 
     private fun initializeStartBroadcastButton(){
-        viewModel.isBroadcastOnline.observe(viewLifecycleOwner, Observer{ isBroadcastOnline: Boolean? ->
+        viewModel.isChannelOnline.observe(viewLifecycleOwner, Observer{ isBroadcastOnline: Boolean? ->
             if(isBroadcastOnline == true){
                 startBroadcastButton?.isEnabled = false
             }
@@ -118,9 +118,9 @@ class StreamerHomeFragment: LoadableContentFragment(R.layout.streamer_home_fragm
         startBroadcastButton?.setOnClickListener {
             activity?.let {
                 val action = if(checkPermissions(it, listOf(Manifest.permission.RECORD_AUDIO, Manifest.permission.CAMERA))){
-                    StreamerHomeFragmentDirections.actionDestinationStreamerHomeToDestinationStreamBroadcasting()
+                    ProfileFragmentDirections.actionDestinationStreamerHomeToDestinationStreamBroadcasting()
                 } else{
-                    StreamerHomeFragmentDirections.actionDestinationStreamerHomeToDestinationCamAndMicPermissions()
+                    ProfileFragmentDirections.actionDestinationStreamerHomeToDestinationCamAndMicPermissions()
                 }
 
                 navigationController.navigate(action)

@@ -4,8 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <item android:id="@+id/action_destination_home_to_destination_streamer_home"
-        android:title="@string/streamer_home_fragment_title"
+    <item android:id="@+id/action_destination_home_to_destination_profile"
+        android:title="@string/profile_fragment_title"
         android:icon="@drawable/ic_videocam_white_24dp"
         app:iconTint="@color/colorToolbarIconTint"
         android:orderInCategory="1"

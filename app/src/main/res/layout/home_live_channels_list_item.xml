@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/home_live_broadcasts_list_item_channel_name"
+        android:id="@+id/home_live_channels_list_item_channel_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -21,7 +21,7 @@
         tools:text="MichaelFlora"/>
 
     <TextView
-        android:id="@+id/home_live_broadcasts_list_item_broadcast_name"
+        android:id="@+id/home_live_channels_list_item_broadcast_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="start"
@@ -30,23 +30,23 @@
         android:maxLines="1"
         android:ellipsize="end"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/home_live_broadcasts_list_item_viewers_count_view"
-        app:layout_constraintTop_toBottomOf="@id/home_live_broadcasts_list_item_channel_name"
+        app:layout_constraintEnd_toStartOf="@id/home_live_channels_list_item_viewers_count_view"
+        app:layout_constraintTop_toBottomOf="@id/home_live_channels_list_item_channel_name"
         tools:text="Hello world!"/>
 
     <com.flora.michael.wfcstream.view.ViewersCounterView
-        android:id="@+id/home_live_broadcasts_list_item_viewers_count_view"
+        android:id="@+id/home_live_channels_list_item_viewers_count_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_live_broadcasts_list_item_channel_name"
-        app:layout_constraintBottom_toTopOf="@id/home_live_broadcasts_list_item_bottom_divider"
+        app:layout_constraintTop_toBottomOf="@id/home_live_channels_list_item_channel_name"
+        app:layout_constraintBottom_toTopOf="@id/home_live_channels_list_item_bottom_divider"
         app:layout_constraintDimensionRatio="3"
         app:viewersCount="0"
         app:viewersTint="@color/colorViewersCounter"/>
 
     <View
-        android:id="@+id/home_live_broadcasts_list_item_bottom_divider"
+        android:id="@+id/home_live_channels_list_item_bottom_divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="@color/colorPrimary"
@@ -54,6 +54,6 @@
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_live_broadcasts_list_item_broadcast_name"/>
+        app:layout_constraintTop_toBottomOf="@id/home_live_channels_list_item_broadcast_name"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

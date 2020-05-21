@@ -1,13 +1,13 @@
-package com.flora.michael.wfcstream.repository.wfc_stream_api
+package com.flora.michael.wfcstream.repository.wfsBroadcastApi
 
-import com.flora.michael.wfcstream.model.response.broadcast.*
+import com.flora.michael.wfcstream.model.response.channels.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
-interface BroadcastsApi {
+interface ChannelsApi {
     @Multipart
     @POST("notify_broadcast_started")
     suspend fun notifyBroadcastStarted(
@@ -20,14 +20,14 @@ interface BroadcastsApi {
         @Part("access_token") accessToken: String
     ): Response<StopStreamResponse>
 
-    @GET("get_live_broadcasts")
-    suspend fun getLiveBroadcasts(): Response<List<BroadcastInformation>>
+    @GET("get_live_channels")
+    suspend fun getLiveChannels(): Response<List<ChannelInformation>>
 
     @Multipart
-    @POST("get_own_broadcast_information")
-    suspend fun getOwnBroadcastInformation(
+    @POST("get_own_channel_information")
+    suspend fun getOwnChannelInformation(
         @Part("access_token") accessToken: String
-    ): Response<BroadcastInformation>
+    ): Response<ChannelInformation>
 
     @Multipart
     @POST("update_broadcast_name")
@@ -40,20 +40,20 @@ interface BroadcastsApi {
     @POST("started_watching_broadcast")
     suspend fun startedWatchingBroadcast(
         @Part("access_token") accessToken: String,
-        @Part("broadcast_id") broadcast_id: Long
+        @Part("channel_id") channel_id: Long
     ): Response<StartedWatchingBroadcastResponse>
 
     @Multipart
     @POST("stopped_watching_broadcast")
     suspend fun stoppedWatchingBroadcast(
         @Part("access_token") accessToken: String,
-        @Part("broadcast_id") broadcast_id: Long
+        @Part("channel_id") channel_id: Long
     ): Response<StoppedWatchingBroadcastResponse>
 
     @Multipart
-    @POST("get_broadcast_information")
-    suspend fun getBroadcastInformation(
+    @POST("get_channel_information")
+    suspend fun getChannelInformation(
         @Part("access_token") accessToken: String,
-        @Part("broadcast_id") broadcast_id: Long
-    ): Response<BroadcastInformation>
+        @Part("channel_id") channel_id: Long
+    ): Response<ChannelInformation>
 }

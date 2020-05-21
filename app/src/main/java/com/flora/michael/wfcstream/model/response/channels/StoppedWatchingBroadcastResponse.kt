@@ -1,6 +1,6 @@
-package com.flora.michael.wfcstream.model.response.broadcast
+package com.flora.michael.wfcstream.model.response.channels
 
-import com.flora.michael.wfcstream.model.resultCode.broadcast.StoppedWatchingBroadcastResultCode
+import com.flora.michael.wfcstream.model.resultCode.channels.StoppedWatchingBroadcastResultCode
 import com.google.gson.annotations.SerializedName
 
 data class StoppedWatchingBroadcastResponse(

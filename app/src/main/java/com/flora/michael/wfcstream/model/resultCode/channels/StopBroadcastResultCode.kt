@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.model.resultCode.broadcast
+package com.flora.michael.wfcstream.model.resultCode.channels
 
 import androidx.annotation.StringRes
 import com.flora.michael.wfcstream.R
@@ -13,7 +13,7 @@ enum class StopBroadcastResultCode(
     @SerializedName("1")
     TokenDoesNotExist(R.string.notify_broadcast_stopped_result_code_token_does_not_exist),
     @SerializedName("2")
-    BroadcastAlreadyOffline(R.string.notify_broadcast_stopped_result_code_broadcast_already_offline),
+    ChannelIsOffline(R.string.notify_broadcast_stopped_result_code_broadcast_already_offline),
     @SerializedName("3")
     Unknown(R.string.notify_broadcast_stopped_result_code_unknown),
     @SerializedName("4")

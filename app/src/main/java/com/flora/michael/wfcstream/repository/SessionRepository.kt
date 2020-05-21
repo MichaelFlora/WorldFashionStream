@@ -1,6 +1,6 @@
 package com.flora.michael.wfcstream.repository
 
-import com.flora.michael.wfcstream.repository.wfc_stream_api.SessionApi
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.SessionApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
