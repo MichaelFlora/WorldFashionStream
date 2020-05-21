@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.model.resultCode.broadcast
+package com.flora.michael.wfcstream.model.resultCode.channels
 
 import androidx.annotation.StringRes
 import com.flora.michael.wfcstream.R

@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.ui.stream
+package com.flora.michael.wfcstream.ui.broadcast
 
 import android.os.Bundle
 import android.os.Handler
@@ -27,7 +27,7 @@ import com.flashphoner.fpwcsapi.session.*
 import com.flora.michael.wfcstream.R
 import com.flora.michael.wfcstream.ui.LoadableContentFragment
 import com.flora.michael.wfcstream.view.ViewersCounterView
-import com.flora.michael.wfcstream.viewmodel.stream.StreamViewModel
+import com.flora.michael.wfcstream.viewmodel.broadcast.BroadcastViewModel
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,9 +35,9 @@ import kotlinx.coroutines.runBlocking
 import org.webrtc.RendererCommon
 import org.webrtc.SurfaceViewRenderer
 
-class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
-    private val viewModel by viewModels<StreamViewModel>()
-    private val broadcastNavigationArguments: StreamFragmentArgs by navArgs()
+class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
+    private val viewModel by viewModels<BroadcastViewModel>()
+    private val broadcastNavigationArguments: BroadcastFragmentArgs by navArgs()
     private val playerButtonsFadeOutAfterMilliseconds = 3000L
 
     private var webCallServerSession: Session? = null
@@ -68,7 +68,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     private var broadcastRendererContainer: PercentFrameLayout? = null
     private var broadcastRenderer: SurfaceViewRenderer? = null
     private var channelNameTextView: TextView? = null
-    private var broadcastTitle: TextView? = null
+    private var broadcastName: TextView? = null
     private var viewersCounterView: ViewersCounterView? = null
 
     private var playerButtonsContainer: ConstraintLayout? = null
@@ -102,7 +102,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findAllViews()
         initializeAllViews()
-        viewModel.initialize(broadcastNavigationArguments.broadcastId)
+        viewModel.initialize(broadcastNavigationArguments.channelId)
         connectToWebCallServer()
         super.onViewCreated(view, savedInstanceState)
     }
@@ -146,7 +146,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
             broadcastRendererContainer = findViewById(R.id.stream_renderer_container)
             broadcastRenderer = findViewById(R.id.stream_renderer)
             channelNameTextView = findViewById(R.id.stream_channel_name)
-            broadcastTitle = findViewById(R.id.stream_title)
+            broadcastName = findViewById(R.id.stream_title)
             viewersCounterView = findViewById(R.id.stream_fragment_viewers_count_view)
 
             playerButtonsContainer = findViewById(R.id.stream_fragment_player_buttons_container)
@@ -157,7 +157,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
     private fun initializeAllViews(){
         initializeChannelNameTextView()
-        initializeBroadcastTitleTextView()
+        initializeBroadcastNameTextView()
         initializeVideoRenderer()
         initializePlayerButtonsContainer()
         initializeViewersCountView()
@@ -169,8 +169,8 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
         channelNameTextView?.text = broadcastNavigationArguments.channelName
     }
 
-    private fun initializeBroadcastTitleTextView(){
-        broadcastTitle?.text = broadcastNavigationArguments.broadcastTitle
+    private fun initializeBroadcastNameTextView(){
+        broadcastName?.text = broadcastNavigationArguments.broadcastName
     }
 
     private fun initializeVideoRenderer(){
@@ -252,7 +252,7 @@ class StreamFragment: LoadableContentFragment(R.layout.stream_fragment) {
     }
 
     private fun createWebCallServerBroadcast(webCallServerSession: Session?): Stream?{
-        val streamOptions = StreamOptions(viewModel.broadcastId.toString())
+        val streamOptions = StreamOptions(viewModel.channelId.toString())
 
         streamOptions.constraints = Constraints(
             AudioConstraints(),

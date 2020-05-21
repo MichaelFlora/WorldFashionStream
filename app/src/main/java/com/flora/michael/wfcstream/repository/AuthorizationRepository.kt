@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.flora.michael.wfcstream.model.resultCode.authorization.LogInResultCode
 import com.flora.michael.wfcstream.model.resultCode.authorization.LogOutResultCode
 import com.flora.michael.wfcstream.model.resultCode.authorization.RegisterResultCode
-import com.flora.michael.wfcstream.repository.wfc_stream_api.AuthorizationApi
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.AuthorizationApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

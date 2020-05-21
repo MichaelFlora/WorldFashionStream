@@ -1,6 +1,6 @@
-package com.flora.michael.wfcstream.model.response.broadcast
+package com.flora.michael.wfcstream.model.response.channels
 
-import com.flora.michael.wfcstream.model.resultCode.broadcast.UpdateBroadcastNameResultCode
+import com.flora.michael.wfcstream.model.resultCode.channels.UpdateBroadcastNameResultCode
 import com.google.gson.annotations.SerializedName
 
 data class UpdateBroadcastNameResponse(

@@ -4,12 +4,12 @@ import android.app.Application
 import android.content.Context
 import com.flora.michael.wfcstream.network.BackendApiManager
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
-import com.flora.michael.wfcstream.repository.BroadcastsRepository
+import com.flora.michael.wfcstream.repository.ChannelsRepository
 import com.flora.michael.wfcstream.repository.PreferencesRepository
 import com.flora.michael.wfcstream.repository.SessionRepository
-import com.flora.michael.wfcstream.repository.wfc_stream_api.AuthorizationApi
-import com.flora.michael.wfcstream.repository.wfc_stream_api.BroadcastsApi
-import com.flora.michael.wfcstream.repository.wfc_stream_api.SessionApi
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.AuthorizationApi
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.ChannelsApi
+import com.flora.michael.wfcstream.repository.wfsBroadcastApi.SessionApi
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.bind
@@ -38,9 +38,9 @@ class WFCStreamApplication : Application(), KodeinAware{
         }
         bind<SessionApi>() with singleton{ instance<BackendApiManager>().provideApi(SessionApi::class.java) }
         bind<AuthorizationApi>() with singleton{ instance<BackendApiManager>().provideApi(AuthorizationApi::class.java, secureSession = true) }
-        bind<BroadcastsApi>() with singleton{ instance<BackendApiManager>().provideApi(BroadcastsApi::class.java, secureSession = true) }
+        bind<ChannelsApi>() with singleton{ instance<BackendApiManager>().provideApi(ChannelsApi::class.java, secureSession = true) }
         bind<SessionRepository>() with singleton{ SessionRepository(instance()) }
         bind<AuthorizationRepository>() with singleton{ AuthorizationRepository(instance(), instance()) }
-        bind<BroadcastsRepository>() with singleton { BroadcastsRepository(instance()) }
+        bind<ChannelsRepository>() with singleton { ChannelsRepository(instance()) }
     }
 }

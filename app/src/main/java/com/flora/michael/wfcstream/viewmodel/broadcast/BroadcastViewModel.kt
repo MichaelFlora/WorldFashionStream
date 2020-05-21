@@ -1,4 +1,4 @@
-package com.flora.michael.wfcstream.viewmodel.stream
+package com.flora.michael.wfcstream.viewmodel.broadcast
 
 import android.app.Application
 import android.util.Log
@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
-import com.flora.michael.wfcstream.repository.BroadcastsRepository
+import com.flora.michael.wfcstream.repository.ChannelsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -17,10 +17,10 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
 import org.kodein.di.generic.instance
 
-class StreamViewModel(application: Application): AndroidViewModel(application), KodeinAware{
+class BroadcastViewModel(application: Application): AndroidViewModel(application), KodeinAware{
     override val kodein: Kodein by closestKodein()
     private val authorizationRepository: AuthorizationRepository by instance()
-    private val broadcastsRepository: BroadcastsRepository by instance()
+    private val channelsRepository: ChannelsRepository by instance()
 
     private val viewersCountMutable = MutableLiveData(0)
     private val isBroadcastPlayingMutable = MutableLiveData<Boolean>(false)
@@ -31,35 +31,35 @@ class StreamViewModel(application: Application): AndroidViewModel(application), 
 
     val viewersCount: LiveData<Int> = viewersCountMutable
 
-    var broadcastId: Long = -1
+    var channelId: Long = -1
         private set
 
     init{
         startRefreshViewersCount()
     }
 
-    fun initialize(broadcastId: Long){
-        this.broadcastId = broadcastId
+    fun initialize(channelId: Long){
+        this.channelId = channelId
     }
 
     fun notifyUserStartedWatchingBroadcast(){
-        if(broadcastId < 0)
+        if(channelId < 0)
             return
 
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
             viewModelScope.launch {
-                broadcastsRepository.startedWatchingBroadcast(authorizationToken, broadcastId)
+                channelsRepository.startedWatchingBroadcast(authorizationToken, channelId)
             }
         }
     }
 
     fun notifyUserStoppedWatchingBroadcast(){
-        if(broadcastId < 0)
+        if(channelId < 0)
             return
 
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
             viewModelScope.launch {
-                broadcastsRepository.stoppedWatchingBroadcast(authorizationToken, broadcastId)
+                channelsRepository.stoppedWatchingBroadcast(authorizationToken, channelId)
             }
         }
     }
@@ -69,8 +69,8 @@ class StreamViewModel(application: Application): AndroidViewModel(application), 
             while(isActive){
                 delay(5000)
                 authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
-                    if(broadcastId >= 0){
-                        val viewersCount = broadcastsRepository.getBroadcastInformation(authorizationToken, broadcastId)?.viewersCount
+                    if(channelId >= 0){
+                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.viewersCount
                         Log.e("TEST", "TYT")
 
                         if(viewersCount != null){

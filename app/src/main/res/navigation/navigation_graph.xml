@@ -25,16 +25,16 @@
         tools:layout="@layout/home_fragment">
 
         <action
-            android:id="@+id/action_destination_home_to_destination_stream"
-            app:destination="@id/destination_stream"
+            android:id="@+id/action_destination_home_to_destination_broadcast"
+            app:destination="@id/destination_broadcast"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/stay_as_is"
             app:popEnterAnim="@anim/stay_as_is"
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/action_destination_home_to_destination_streamer_home"
-            app:destination="@id/destination_streamer_home"
+            android:id="@+id/action_destination_home_to_destination_profile"
+            app:destination="@id/destination_profile"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/stay_as_is"
             app:popEnterAnim="@anim/stay_as_is"
@@ -43,13 +43,13 @@
     </fragment>
 
     <fragment
-        android:id="@+id/destination_stream"
-        android:name="com.flora.michael.wfcstream.ui.stream.StreamFragment"
+        android:id="@+id/destination_broadcast"
+        android:name="com.flora.michael.wfcstream.ui.broadcast.BroadcastFragment"
         android:label="@string/broadcast_fragment_title"
         tools:layout="@layout/stream_fragment">
 
         <argument
-            android:name="broadcastId"
+            android:name="channelId"
             app:argType="long"
             app:nullable="false"/>
 
@@ -59,7 +59,7 @@
             app:nullable="false"/>
 
         <argument
-            android:name="broadcastTitle"
+            android:name="broadcastName"
             app:argType="string"
             app:nullable="false"/>
 
@@ -126,10 +126,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/destination_streamer_home"
-        android:name="com.flora.michael.wfcstream.ui.streamerhome.StreamerHomeFragment"
-        android:label="@string/streamer_home_fragment_title"
-        tools:layout="@layout/streamer_home_fragment">
+        android:id="@+id/destination_profile"
+        android:name="com.flora.michael.wfcstream.ui.profile.ProfileFragment"
+        android:label="@string/profile_fragment_title"
+        tools:layout="@layout/profile_fragment">
 
         <action
             android:id="@+id/action_destination_streamer_home_to_destination_cam_and_mic_permissions"
@@ -162,7 +162,7 @@
             app:exitAnim="@anim/stay_as_is"
             app:popEnterAnim="@anim/stay_as_is"
             app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/destination_streamer_home"/>
+            app:popUpTo="@id/destination_profile"/>
 
     </fragment>
 

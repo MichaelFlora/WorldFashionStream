@@ -66,7 +66,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:orientation="vertical"
-                    tools:listitem="@layout/home_live_broadcasts_list_item"
+                    tools:listitem="@layout/home_live_channels_list_item"
                     tools:itemCount="3"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -118,7 +118,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:orientation="vertical"
-                    tools:listitem="@layout/home_live_broadcasts_list_item"
+                    tools:listitem="@layout/home_live_channels_list_item"
                     tools:itemCount="3"
                     tools:visibility="visible"/>
 

@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.flora.michael.wfcstream.model.response.broadcast.BroadcastInformation
-import com.flora.michael.wfcstream.repository.BroadcastsRepository
+import com.flora.michael.wfcstream.model.response.channels.ChannelInformation
+import com.flora.michael.wfcstream.repository.ChannelsRepository
 import com.flora.michael.wfcstream.viewmodel.DestinationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,11 +16,11 @@ import org.kodein.di.generic.instance
 
 class HomeViewModel(application: Application): DestinationViewModel(application), KodeinAware{
     override val kodein by closestKodein()
-    private val broadcastsRepository: BroadcastsRepository by instance()
-    private val activeChannelsMutable = MutableLiveData<List<BroadcastInformation>>()
+    private val channelsRepository: ChannelsRepository by instance()
+    private val activeChannelsMutable = MutableLiveData<List<ChannelInformation>>()
     private val isRefreshingInformationMutable = MutableLiveData<Boolean>()
 
-    val activeChannels: LiveData<List<BroadcastInformation>> = activeChannelsMutable
+    val activeChannels: LiveData<List<ChannelInformation>> = activeChannelsMutable
     val isRefreshing: LiveData<Boolean> = isRefreshingInformationMutable
 
     fun getChannelsInformationFromServer(){
@@ -55,7 +55,7 @@ class HomeViewModel(application: Application): DestinationViewModel(application)
     }
 
     private suspend fun getActiveChannelsInformation() = withContext(Dispatchers.Main) {
-        activeChannelsMutable.value = broadcastsRepository.getLiveBroadcasts()
+        activeChannelsMutable.value = channelsRepository.getLiveChannels()
     }
 
     private suspend fun getInactiveChannelsInformation() = withContext(Dispatchers.Main){
