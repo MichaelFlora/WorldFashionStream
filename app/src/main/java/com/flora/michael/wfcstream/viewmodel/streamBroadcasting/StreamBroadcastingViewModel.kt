@@ -68,7 +68,9 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
                         val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.viewersCount
 
                         if(viewersCount != null){
-                            viewersCountMutable.value = viewersCount
+                            withContext(Dispatchers.Main){
+                                viewersCountMutable.value = viewersCount
+                            }
                         }
                     }
                 }

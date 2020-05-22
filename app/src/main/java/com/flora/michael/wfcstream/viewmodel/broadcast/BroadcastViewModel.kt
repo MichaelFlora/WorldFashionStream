@@ -8,10 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.flora.michael.wfcstream.repository.AuthorizationRepository
 import com.flora.michael.wfcstream.repository.ChannelsRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.closestKodein
@@ -74,7 +71,9 @@ class BroadcastViewModel(application: Application): AndroidViewModel(application
                         Log.e("TEST", "TYT")
 
                         if(viewersCount != null){
-                            viewersCountMutable.value = viewersCount
+                            withContext(Dispatchers.Main){
+                                viewersCountMutable.value = viewersCount
+                            }
                         }
                     }
                 }

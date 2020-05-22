@@ -33,7 +33,15 @@ class StreamBroadcastingFragment: LoadableContentFragment(R.layout.stream_broadc
 
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
         lifecycleScope.launch(Dispatchers.Main) {
-            Toast.makeText(context, broadcastStatus.name, Toast.LENGTH_LONG).show()
+
+            val statusMessage = if(broadcastStatus == StreamStatus.FAILED){
+                "$broadcastStatus: ${broadcast.info}"
+            } else{
+                broadcastStatus.toString()
+            }
+
+            Toast.makeText(context, statusMessage, Toast.LENGTH_LONG).show()
+
             if (broadcastStatus == StreamStatus.PUBLISHING) {
                 viewModel.notifyViewersAboutBroadcastState(isOnline = true)
             } else if (broadcastStatus == StreamStatus.UNPUBLISHED) {
