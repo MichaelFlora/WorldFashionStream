@@ -34,11 +34,11 @@ class ActiveChannelsListAdapter(
             val activeChannel = activeChannels[position]
 
             channelName.text = activeChannel.userName
-            broadcastName.text = activeChannel.broadcastName
-            viewersCounterView.viewersCount = activeChannel.viewersCount
+            broadcastName.text = activeChannel.channelTitle
+            viewersCounterView.viewersCount = activeChannel.watchersCount
 
             setOnClickListener {
-                val action = HomeFragmentDirections.actionDestinationHomeToDestinationBroadcast(activeChannel.channelId, activeChannel.userName, activeChannel.broadcastName)
+                val action = HomeFragmentDirections.actionDestinationHomeToDestinationBroadcast(activeChannel.channelId, activeChannel.userName, activeChannel.channelTitle)
                 navigationController.navigate(action)
             }
         }

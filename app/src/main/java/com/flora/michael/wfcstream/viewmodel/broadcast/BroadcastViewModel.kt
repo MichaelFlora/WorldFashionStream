@@ -67,7 +67,7 @@ class BroadcastViewModel(application: Application): AndroidViewModel(application
                 delay(5000)
                 authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
                     if(channelId >= 0){
-                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.viewersCount
+                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.watchersCount
                         Log.e("TEST", "TYT")
 
                         if(viewersCount != null){

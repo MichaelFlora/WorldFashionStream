@@ -9,15 +9,15 @@ import retrofit2.HttpException
 
 class ChannelsRepository(private val channelsApi: ChannelsApi) {
 
-    suspend fun notifyBroadcastStarted(accessToken: String): StartBroadcastResultCode = withContext(Dispatchers.IO){
-        var resultCode: StartBroadcastResultCode = StartBroadcastResultCode.DefaultError
+    suspend fun notifyChannelIsLive(accessToken: String): NotifyChannelIsLiveResultCode = withContext(Dispatchers.IO){
+        var resultCode: NotifyChannelIsLiveResultCode = NotifyChannelIsLiveResultCode.DefaultError
 
         try{
-            val response = channelsApi.notifyBroadcastStarted(accessToken)
+            val response = channelsApi.notifyChannelIsLive(accessToken)
 
             if(response.isSuccessful){
-                response.body()?.let{ startStreamResponse ->
-                    resultCode = startStreamResponse.resultCode
+                response.body()?.let{ notifyChannelIsLiveResponse ->
+                    resultCode = notifyChannelIsLiveResponse.resultCode
                 }
             }
         } catch(ex: HttpException){
@@ -27,15 +27,15 @@ class ChannelsRepository(private val channelsApi: ChannelsApi) {
         resultCode
     }
 
-    suspend fun notifyBroadcastStopped(accessToken: String): StopBroadcastResultCode = withContext(Dispatchers.IO){
-        var resultCodeCode: StopBroadcastResultCode = StopBroadcastResultCode.DefaultError
+    suspend fun notifyChannelIsOffline(accessToken: String): NotifyChannelIsOfflineResultCode = withContext(Dispatchers.IO){
+        var resultCodeCode: NotifyChannelIsOfflineResultCode = NotifyChannelIsOfflineResultCode.DefaultError
 
         try{
-            val response = channelsApi.notifyBroadcastStopped(accessToken)
+            val response = channelsApi.notifyChannelIsOffline(accessToken)
 
             if(response.isSuccessful){
-                response.body()?.let{ stopStreamResponse ->
-                    resultCodeCode = stopStreamResponse.resultCodeCode
+                response.body()?.let{ notifyChannelIsOfflineResponse ->
+                    resultCodeCode = notifyChannelIsOfflineResponse.resultCode
                 }
             }
         } catch(ex: HttpException){
@@ -65,7 +65,7 @@ class ChannelsRepository(private val channelsApi: ChannelsApi) {
         var ownChannelInformation: ChannelInformation? = null
 
         try{
-            val response = channelsApi.getOwnChannelInformation(accessToken)
+            val response = channelsApi.getChannelInformation(accessToken)
 
             if(response.isSuccessful){
                 ownChannelInformation = response.body()
@@ -81,7 +81,7 @@ class ChannelsRepository(private val channelsApi: ChannelsApi) {
         var resultCode: UpdateBroadcastNameResultCode = UpdateBroadcastNameResultCode.DefaultError
 
         try{
-            val response = channelsApi.updateBroadcastName(accessToken, newBroadcastName)
+            val response = channelsApi.updateChannelTitle(accessToken, newBroadcastName)
 
             if(response.isSuccessful){
                 response.body()?.let{ updateBroadcastNameResponse ->
@@ -95,11 +95,11 @@ class ChannelsRepository(private val channelsApi: ChannelsApi) {
         resultCode
     }
 
-    suspend fun startedWatchingBroadcast(accessToken: String, channelId: Long): StartedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
-        var resultCode: StartedWatchingBroadcastResultCode = StartedWatchingBroadcastResultCode.DefaultError
+    suspend fun startedWatchingBroadcast(accessToken: String, channelId: Long): StartWatchingChannelResultCode? = withContext(Dispatchers.IO){
+        var resultCode: StartWatchingChannelResultCode = StartWatchingChannelResultCode.DefaultError
 
         try{
-            val response = channelsApi.startedWatchingBroadcast(accessToken, channelId)
+            val response = channelsApi.startWatchingChannel(accessToken, channelId)
 
             if(response.isSuccessful){
                 response.body()?.let{ startedWatchingBroadcastResponse ->
@@ -113,11 +113,11 @@ class ChannelsRepository(private val channelsApi: ChannelsApi) {
         resultCode
     }
 
-    suspend fun stoppedWatchingBroadcast(accessToken: String, channelId: Long): StoppedWatchingBroadcastResultCode? = withContext(Dispatchers.IO){
-        var resultCode: StoppedWatchingBroadcastResultCode = StoppedWatchingBroadcastResultCode.DefaultError
+    suspend fun stoppedWatchingBroadcast(accessToken: String, channelId: Long): StopWatchingChannelResultCode? = withContext(Dispatchers.IO){
+        var resultCode: StopWatchingChannelResultCode = StopWatchingChannelResultCode.DefaultError
 
         try{
-            val response = channelsApi.stoppedWatchingBroadcast(accessToken, channelId)
+            val response = channelsApi.stopWatchingChannel(accessToken, channelId)
 
             if(response.isSuccessful){
                 response.body()?.let{ stoppedWatchingBroadcastResponse ->

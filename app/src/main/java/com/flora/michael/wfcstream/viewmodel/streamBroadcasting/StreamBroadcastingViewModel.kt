@@ -65,7 +65,7 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
                 delay(5000)
                 authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
                     channelId.value?.let{ channelId: Long ->
-                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.viewersCount
+                        val viewersCount = channelsRepository.getChannelInformation(authorizationToken, channelId)?.watchersCount
 
                         if(viewersCount != null){
                             withContext(Dispatchers.Main){
@@ -84,9 +84,9 @@ class StreamBroadcastingViewModel(application: Application): DestinationViewMode
         authorizationRepository.currentAccessToken.value?.let { authorizationToken ->
             GlobalScope.launch {
                 if(isOnline){
-                    channelsRepository.notifyBroadcastStarted(authorizationToken)
+                    channelsRepository.notifyChannelIsLive(authorizationToken)
                 } else{
-                    channelsRepository.notifyBroadcastStopped(authorizationToken)
+                    channelsRepository.notifyChannelIsOffline(authorizationToken)
                 }
             }
         }
