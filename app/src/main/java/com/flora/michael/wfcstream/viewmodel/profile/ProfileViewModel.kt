@@ -30,7 +30,7 @@ class ProfileViewModel(application: Application): DestinationViewModel(applicati
             viewModelScope.launch {
                 val channelInformation = channelsRepository.getOwnChannelInformation(authorizationToken)
                 userNameMutable.value = channelInformation?.userName
-                broadcastNameMutable.value = channelInformation?.broadcastName
+                broadcastNameMutable.value = channelInformation?.channelTitle
                 isChannelOnlineMutable.value = channelInformation?.isOnline
                 setLoadingOperationFinished()
             }

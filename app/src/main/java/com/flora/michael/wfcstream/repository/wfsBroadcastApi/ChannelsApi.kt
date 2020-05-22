@@ -9,51 +9,45 @@ import retrofit2.http.Part
 
 interface ChannelsApi {
     @Multipart
-    @POST("notify_broadcast_started")
-    suspend fun notifyBroadcastStarted(
+    @POST("notify_channel_is_live")
+    suspend fun notifyChannelIsLive(
         @Part("access_token") accessToken: String
-    ): Response<StartStreamResponse>
+    ): Response<NotifyChannelIsLiveResponse>
 
     @Multipart
-    @POST("notify_broadcast_stopped")
-    suspend fun notifyBroadcastStopped(
+    @POST("notify_channel_is_offline")
+    suspend fun notifyChannelIsOffline(
         @Part("access_token") accessToken: String
-    ): Response<StopStreamResponse>
+    ): Response<NotifyChannelIsOfflineResponse>
 
     @GET("get_live_channels")
     suspend fun getLiveChannels(): Response<List<ChannelInformation>>
 
     @Multipart
-    @POST("get_own_channel_information")
-    suspend fun getOwnChannelInformation(
-        @Part("access_token") accessToken: String
-    ): Response<ChannelInformation>
-
-    @Multipart
-    @POST("update_broadcast_name")
-    suspend fun updateBroadcastName(
+    @POST("update_channel_title")
+    suspend fun updateChannelTitle(
         @Part("access_token") accessToken: String,
-        @Part("broadcast_name") newBroadcastName: String
+        @Part("channel_title") newChannelTitle: String
     ): Response<UpdateBroadcastNameResponse>
 
     @Multipart
-    @POST("started_watching_broadcast")
-    suspend fun startedWatchingBroadcast(
+    @POST("start_watching_channel")
+    suspend fun startWatchingChannel(
         @Part("access_token") accessToken: String,
         @Part("channel_id") channel_id: Long
-    ): Response<StartedWatchingBroadcastResponse>
+    ): Response<StartWatchingChannelResponse>
 
     @Multipart
-    @POST("stopped_watching_broadcast")
-    suspend fun stoppedWatchingBroadcast(
+    @POST("stop_watching_channel")
+    suspend fun stopWatchingChannel(
         @Part("access_token") accessToken: String,
         @Part("channel_id") channel_id: Long
-    ): Response<StoppedWatchingBroadcastResponse>
+    ): Response<StopWatchingChannelResponse>
 
     @Multipart
     @POST("get_channel_information")
     suspend fun getChannelInformation(
         @Part("access_token") accessToken: String,
-        @Part("channel_id") channel_id: Long
+        @Part("channel_id") channel_id: Long? = null
     ): Response<ChannelInformation>
 }

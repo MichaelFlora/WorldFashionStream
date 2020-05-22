@@ -9,11 +9,11 @@ data class ChannelInformation (
     @SerializedName("user_name")
     val userName: String,
 
-    @SerializedName("broadcast_name")
-    val broadcastName: String,
+    @SerializedName("channel_title")
+    val channelTitle: String,
 
-    @SerializedName("viewers_count")
-    val viewersCount: Int,
+    @SerializedName("watchers_count")
+    val watchersCount: Int,
 
     @SerializedName("is_online")
     val isOnline: Boolean
