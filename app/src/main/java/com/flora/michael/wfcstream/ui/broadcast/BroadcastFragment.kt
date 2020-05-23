@@ -77,26 +77,16 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
 
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
 
-        val statusMessage = when(broadcastStatus){
-            StreamStatus.PLAYING -> "Трансляция проигрывается"
-            StreamStatus.NOT_ENOUGH_BANDWIDTH -> "Not enough bandwidth, consider using lower video resolution or bitrate."
-            StreamStatus.FAILED -> {
-                when(broadcast.info){
-                    StreamStatusInfo.SESSION_DOES_NOT_EXIST -> "$broadcastStatus: Actual session does not exist"
-                    StreamStatusInfo.STOPPED_BY_PUBLISHER_STOP -> "$broadcastStatus: Related publisher stopped its stream or lost connection"
-                    StreamStatusInfo.SESSION_NOT_READY -> "$broadcastStatus: Session is not initialized or terminated on play ordinary stream"
-                    StreamStatusInfo.RTSP_STREAM_NOT_FOUND -> "$broadcastStatus: Rtsp stream not found where agent received '404-Not Found'"
-                    StreamStatusInfo.FAILED_TO_CONNECT_TO_RTSP_STREAM -> "$broadcastStatus: Failed to connect to rtsp stream"
-                    StreamStatusInfo.FILE_NOT_FOUND -> "$broadcastStatus: File does not exist, check filename"
-                    StreamStatusInfo.FILE_HAS_WRONG_FORMAT -> "$broadcastStatus: File has wrong format on play vod, this format is not supported"
-                    StreamStatusInfo.TRANSCODING_REQUIRED_BUT_DISABLED -> "$broadcastStatus: Transcoding required, but disabled in settings"
-                    else -> broadcast.info
-                }
-            }
-            else -> broadcastStatus.toString()
-        }
+        showBroadcastErrorToast(broadcast, broadcastStatus)
 
-        Toast.makeText(context, statusMessage, Toast.LENGTH_LONG).show()
+        if(broadcastStatus == StreamStatus.PLAYING || broadcastStatus == StreamStatus.PUBLISHING){
+            viewModel.notifyUserStartedWatchingBroadcast()
+        } else if(broadcastStatus == StreamStatus.STOPPED ||
+            broadcastStatus == StreamStatus.UNPUBLISHED ||
+            broadcastStatus == StreamStatus.LOCAL_STREAM_STOPPED ||
+            broadcastStatus == StreamStatus.PAUSED){
+            viewModel.notifyUserStoppedWatchingBroadcast()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,15 +108,15 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
             ex.printStackTrace()
         }
 
-        if(webCallServerBroadcast?.status == StreamStatus.PLAYING){
-            viewModel.notifyUserStartedWatchingBroadcast()
-        }
+//        if(webCallServerBroadcast?.status == StreamStatus.PLAYING){
+//            viewModel.notifyUserStartedWatchingBroadcast()
+//        }
     }
 
     override fun onPause() {
         super.onPause()
         broadcastRenderer?.release()
-        viewModel.notifyUserStoppedWatchingBroadcast()
+        //viewModel.notifyUserStoppedWatchingBroadcast()
     }
 
     override fun onStop() {
@@ -333,6 +323,30 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
         }
 
         webCallServerBroadcast = null
+    }
+
+    private fun showBroadcastErrorToast(broadcast: Stream, broadcastStatus: StreamStatus){
+        val errorMessage = when(broadcastStatus){
+            StreamStatus.NOT_ENOUGH_BANDWIDTH -> "Not enough bandwidth, consider using lower video resolution or bitrate."
+            StreamStatus.FAILED -> {
+                when(broadcast.info){
+                    StreamStatusInfo.SESSION_DOES_NOT_EXIST -> "$broadcastStatus: Actual session does not exist"
+                    StreamStatusInfo.STOPPED_BY_PUBLISHER_STOP -> "$broadcastStatus: Related publisher stopped its stream or lost connection"
+                    StreamStatusInfo.SESSION_NOT_READY -> "$broadcastStatus: Session is not initialized or terminated on play ordinary stream"
+                    StreamStatusInfo.RTSP_STREAM_NOT_FOUND -> "$broadcastStatus: Rtsp stream not found where agent received '404-Not Found'"
+                    StreamStatusInfo.FAILED_TO_CONNECT_TO_RTSP_STREAM -> "$broadcastStatus: Failed to connect to rtsp stream"
+                    StreamStatusInfo.FILE_NOT_FOUND -> "$broadcastStatus: File does not exist, check filename"
+                    StreamStatusInfo.FILE_HAS_WRONG_FORMAT -> "$broadcastStatus: File has wrong format on play vod, this format is not supported"
+                    StreamStatusInfo.TRANSCODING_REQUIRED_BUT_DISABLED -> "$broadcastStatus: Transcoding required, but disabled in settings"
+                    else -> broadcast.info
+                }
+            }
+            else -> null
+        }
+
+        errorMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun changeBroadcastStateButtonIcon(isBroadcastPlaying: Boolean){
