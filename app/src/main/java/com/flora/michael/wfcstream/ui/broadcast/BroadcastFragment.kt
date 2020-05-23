@@ -78,22 +78,12 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
     private val onBroadcastStatus: (Stream, StreamStatus) -> Unit = { broadcast, broadcastStatus ->
 
         showBroadcastErrorToast(broadcast, broadcastStatus)
-
-        if(broadcastStatus == StreamStatus.PLAYING || broadcastStatus == StreamStatus.PUBLISHING){
-            viewModel.notifyUserStartedWatchingBroadcast()
-        } else if(broadcastStatus == StreamStatus.STOPPED ||
-            broadcastStatus == StreamStatus.UNPUBLISHED ||
-            broadcastStatus == StreamStatus.LOCAL_STREAM_STOPPED ||
-            broadcastStatus == StreamStatus.PAUSED){
-            viewModel.notifyUserStoppedWatchingBroadcast()
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         findAllViews()
         initializeAllViews()
-        viewModel.initialize(broadcastNavigationArguments.channelId)
-        connectToWebCallServer()
+        viewModel.loadDataFromServer(broadcastNavigationArguments.channelId)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -107,16 +97,11 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
         } catch(ex: IllegalStateException){
             ex.printStackTrace()
         }
-
-//        if(webCallServerBroadcast?.status == StreamStatus.PLAYING){
-//            viewModel.notifyUserStartedWatchingBroadcast()
-//        }
     }
 
     override fun onPause() {
         super.onPause()
         broadcastRenderer?.release()
-        //viewModel.notifyUserStoppedWatchingBroadcast()
     }
 
     override fun onStop() {
@@ -153,6 +138,19 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
         initializeViewersCountView()
         initializeBroadcastStateObservation()
         initializeSoundStateObservation()
+        initializeContentLoadingObservation()
+    }
+
+    private fun initializeContentLoadingObservation(){
+        viewModel.isContentLoading.observe(viewLifecycleOwner, Observer { isContentLoading ->
+            when{
+                isContentLoading -> showLoadingProgressBar(withHiddenContent = true)
+                else -> {
+                    connectToWebCallServer()
+                    hideLoadingProgressBar(withError = false)
+                }
+            }
+        })
     }
 
     private fun initializeChannelNameTextView(){
@@ -309,15 +307,16 @@ class BroadcastFragment: LoadableContentFragment(R.layout.stream_fragment) {
     }
 
     private fun playBroadcast(){
-        stopBroadcast()
         webCallServerBroadcast = createWebCallServerBroadcast(webCallServerSession)
         webCallServerBroadcast?.play()
+        viewModel.notifyUserStartedWatchingBroadcast()
         changeSoundState(viewModel.isSoundEnabled.value ?: false)
     }
 
     private fun stopBroadcast(){
         try{
             webCallServerBroadcast?.stop()
+            viewModel.notifyUserStoppedWatchingBroadcast()
         } catch (ex: Exception){
             ex.printStackTrace()
         }
