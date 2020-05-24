@@ -20,7 +20,7 @@ class ViewersCounterView @JvmOverloads constructor(
 
     var viewersCount: Int = 0
         set(value){
-            viewersCountTextView.text = viewersCount.toString()
+            viewersCountTextView.text = value.toString()
             field = value
         }
 
