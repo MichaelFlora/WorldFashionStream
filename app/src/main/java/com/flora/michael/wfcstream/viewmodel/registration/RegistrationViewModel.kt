@@ -19,22 +19,26 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
     private val loginMutable = MutableLiveData<String>()
     private val userNameMutable = MutableLiveData<String>()
     private val passwordMutable = MutableLiveData<String>()
+    private val emailMutable = MutableLiveData<String>()
     private val confirmPasswordMutable = MutableLiveData<String>()
     private val registerResultMutable = MutableLiveData<String?>()
 
     private val loginErrorMutable = MutableLiveData<String>()
     private val userNameErrorMutable = MutableLiveData<String>()
     private val passwordErrorMutable = MutableLiveData<String>()
+    private val emailErrorMutable = MutableLiveData<String>()
     private val confirmPasswordErrorMutable = MutableLiveData<String>()
 
     val login: LiveData<String> = loginMutable
     val userName: LiveData<String> = userNameMutable
+    val email: LiveData<String> = emailMutable
     val password: LiveData<String> = passwordMutable
     val confirmPassword: LiveData<String> = confirmPasswordMutable
     val registrationResult: LiveData<String?> = registerResultMutable
 
     val loginError: LiveData<String> = loginErrorMutable
     val userNameError: LiveData<String> = userNameErrorMutable
+    val emailError: LiveData<String> = emailErrorMutable
     val passwordError: LiveData<String> = passwordErrorMutable
     val confirmPasswordError: LiveData<String> = confirmPasswordErrorMutable
     val isEnteredDataErrorsExist: LiveData<Boolean> = MediatorLiveData<Boolean>().apply {
@@ -42,6 +46,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
         fun onLiveDataValueChanged(changedLiveData: LiveData<*>){
             value = !(checkIsLoginCorrect(changedLiveData == login) and
                     checkIsUserNameCorrect(changedLiveData == userName) and
+                    checkIsEmailCorrect(changedLiveData == email) and
                     checkIsPasswordCorrect(changedLiveData == password || changedLiveData == confirmPassword) and
                     checkIsConfirmPasswordCorrect(changedLiveData == confirmPassword || changedLiveData == password))
         }
@@ -51,6 +56,9 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
         }
         addSource(userName){
             onLiveDataValueChanged(userName)
+        }
+        addSource(email){
+            onLiveDataValueChanged(email)
         }
         addSource(password){
             onLiveDataValueChanged(password)
@@ -66,6 +74,10 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
 
     fun updateUserName(enteredUserName: String){
         userNameMutable.value = enteredUserName
+    }
+
+    fun updateEmail(enteredEmail: String){
+        emailMutable.value = enteredEmail
     }
 
     fun updatePassword(enteredPassword: String){
@@ -84,7 +96,7 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
             userName.value?.let { userName ->
                 password.value?.let { password ->
                     viewModelScope.launch {
-                        val registerResultCode = authorizationRepository.register(login, password, userName)
+                        val registerResultCode = authorizationRepository.register(login, password, userName, email.value)
 
                         if(registerResultCode == RegisterResultCode.Success){
                             val logInResultCode = authorizationRepository.logIn(login, password)
@@ -160,6 +172,22 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
             return false
         }
 
+        if(userName.startsWith(" ")){
+            if(isWithErrorMessage) {
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_must_not_start_with_space)
+            }
+
+            return false
+        }
+
+        if(userName.contains(Regex("[ ]{2,}"))){
+            if(isWithErrorMessage) {
+                userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_must_not_be_several_spaces_in_a_row)
+            }
+
+            return false
+        }
+
         if(userName.length < MIN_USER_NAME_LENGTH){
             if(isWithErrorMessage) {
                 userNameErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_user_name_min_symbols_count, MIN_USER_NAME_LENGTH)
@@ -177,6 +205,34 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
         }
 
         userNameErrorMutable.value = null
+        return true
+    }
+
+    private fun checkIsEmailCorrect(isWithErrorMessage: Boolean = false): Boolean {
+        val email = this.email.value
+
+        if(email == null || email.isEmpty()){
+            emailErrorMutable.value = null
+            return true
+        }
+
+        if(!email.matches(EMAIL_REGULAR_EXPRESSION)){
+            if(isWithErrorMessage) {
+                emailErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_email_format_is_incorrect)
+            }
+
+            return false
+        }
+
+        if(email.length > MAX_EMAIL_LENGTH){
+            if(isWithErrorMessage) {
+                emailErrorMutable.value = getApplication<Application>().getString(R.string.registration_fragment_email_max_symbols_count, MAX_EMAIL_LENGTH)
+            }
+
+            return false
+        }
+
+        emailErrorMutable.value = null
         return true
     }
 
@@ -230,21 +286,25 @@ class RegistrationViewModel(application: Application): AndroidViewModel(applicat
     private fun checkAllDataCorrect(withErrorMessage: Boolean = false): Boolean{
         return checkIsLoginCorrect(withErrorMessage) and
                 checkIsUserNameCorrect(withErrorMessage) and
+                checkIsEmailCorrect(withErrorMessage) and
                 checkIsPasswordCorrect(withErrorMessage) and
                 checkIsConfirmPasswordCorrect(withErrorMessage)
     }
 
     companion object{
-        const val MIN_LOGIN_LENGTH = 7
+        const val MIN_LOGIN_LENGTH = 3
         const val MAX_LOGIN_LENGTH = 15
 
-        const val MIN_USER_NAME_LENGTH = 5
-        const val MAX_USER_NAME_LENGTH = 15
+        const val MIN_USER_NAME_LENGTH = 1
+        const val MAX_USER_NAME_LENGTH = 30
+
+        const val MAX_EMAIL_LENGTH = 50
 
         const val MAX_PASSWORD_LENGTH = 100
 
-        private val LOGIN_REGULAR_EXPRESSION = Regex("[A-Z0-9_]+", RegexOption.IGNORE_CASE)
-        private val USERNAME_REGULAR_EXPRESSION = Regex("[A-Z0-9_]+", RegexOption.IGNORE_CASE)
+        private val LOGIN_REGULAR_EXPRESSION = Regex("[A-Z0-9]+", RegexOption.IGNORE_CASE)
+        private val USERNAME_REGULAR_EXPRESSION = Regex("""[\p{IsLetter}\d ]+""", RegexOption.IGNORE_CASE)
+        private val EMAIL_REGULAR_EXPRESSION = Regex("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")
     }
 
 }
