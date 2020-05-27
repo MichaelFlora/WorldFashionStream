@@ -22,7 +22,8 @@ interface AuthorizationApi{
     suspend fun register(
         @Part("login") login: String,
         @Part("password") password: String,
-        @Part("user_name") userName: String
+        @Part("user_name") userName: String,
+        @Part("email") email: String? = null
     ): Response<RegisterResponse>
 
     @Multipart

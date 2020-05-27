@@ -22,6 +22,8 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
     private var loginEditText: TextInputEditText? = null
     private var userNameTextInputLayout: TextInputLayout? = null
     private var userNameEditText: TextInputEditText? = null
+    private var emailTextInputLayout: TextInputLayout? = null
+    private var emailEditText: TextInputEditText? = null
     private var passwordTextInputLayout: TextInputLayout? = null
     private var passwordEditText: TextInputEditText? = null
     private var confirmPasswordTextInputLayout: TextInputLayout? = null
@@ -41,6 +43,8 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
             loginEditText = findViewById(R.id.registration_fragment_login_edit_text)
             userNameTextInputLayout = findViewById(R.id.registration_fragment_user_name_input_layout)
             userNameEditText = findViewById(R.id.registration_fragment_user_name_edit_text)
+            emailTextInputLayout = findViewById(R.id.registration_fragment_email_input_layout)
+            emailEditText = findViewById(R.id.registration_fragment_email_edit_text)
             passwordTextInputLayout = findViewById(R.id.registration_fragment_password_input_layout)
             passwordEditText = findViewById(R.id.registration_fragment_password_edit_text)
             confirmPasswordTextInputLayout = findViewById(R.id.registration_fragment_confirm_password_input_layout)
@@ -52,6 +56,7 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
     private fun initializeAllViews(){
         initializeLoginEditText()
         initializeUserNameEditText()
+        initializeEmailEditText()
         initializePasswordEditText()
         initializeConfirmPasswordEditText()
         initializeRegistrationButton()
@@ -97,6 +102,31 @@ class RegistrationFragment : LoadableContentFragment(R.layout.registration_fragm
             addTextChangedListener { editable: Editable? ->
                 editable?.toString()?.let { enteredUserName ->
                     viewModel.updateUserName(enteredUserName)
+                }
+            }
+        }
+    }
+
+    private fun initializeEmailEditText(){
+        emailTextInputLayout?.apply {
+            hint = "$hint (${getString(R.string.registration_fragment_field_is_not_necessary)})"
+
+            isCounterEnabled = true
+            counterMaxLength = RegistrationViewModel.MAX_EMAIL_LENGTH
+
+            isErrorEnabled = true
+
+            viewModel.emailError.observe(viewLifecycleOwner, Observer { error ->
+                this.error = error
+            })
+        }
+
+        emailEditText?.apply {
+            filters = arrayOf(InputFilter.LengthFilter(RegistrationViewModel.MAX_EMAIL_LENGTH))
+
+            addTextChangedListener { editable: Editable? ->
+                editable?.toString()?.let { enteredEmail ->
+                    viewModel.updateEmail(enteredEmail)
                 }
             }
         }

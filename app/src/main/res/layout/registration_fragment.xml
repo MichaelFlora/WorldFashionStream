@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/registration_fragment_content_horizontal_margin"
             android:layout_marginTop="50dp"
+            android:hint="@string/registration_fragment_login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +29,7 @@
                 android:id="@+id/registration_fragment_login_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/registration_fragment_login"/>
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/registration_fragment_content_horizontal_margin"
             android:layout_marginTop="15dp"
+            android:hint="@string/registration_fragment_user_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/registration_fragment_login_input_layout"
@@ -48,7 +50,29 @@
                 android:id="@+id/registration_fragment_user_name_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/registration_fragment_user_name"/>
+                android:maxLines="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/registration_fragment_email_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/registration_fragment_content_horizontal_margin"
+            android:layout_marginTop="15dp"
+            android:hint="@string/registration_fragment_email"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration_fragment_user_name_input_layout"
+            app:endIconMode="clear_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/registration_fragment_email_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:inputType="textEmailAddress"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,16 +83,17 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/registration_fragment_content_horizontal_margin"
             android:layout_marginTop="15dp"
+            android:hint="@string/registration_fragment_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registration_fragment_user_name_input_layout"
+            app:layout_constraintTop_toBottomOf="@id/registration_fragment_email_input_layout"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registration_fragment_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/registration_fragment_password"
+                android:maxLines="1"
                 android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,6 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/registration_fragment_content_horizontal_margin"
             android:layout_marginTop="15dp"
+            android:hint="@string/registration_fragment_confirm_password"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/registration_fragment_password_input_layout"
@@ -89,7 +115,7 @@
                 android:id="@+id/registration_fragment_confirm_password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/registration_fragment_confirm_password"
+                android:maxLines="1"
                 android:inputType="textPassword"/>
 
         </com.google.android.material.textfield.TextInputLayout>

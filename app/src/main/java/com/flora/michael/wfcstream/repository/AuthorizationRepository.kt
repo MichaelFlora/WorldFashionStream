@@ -45,13 +45,14 @@ class AuthorizationRepository(
     suspend fun register(
         login: String,
         password: String,
-        userName: String
+        userName: String,
+        email: String? = null
     ): RegisterResultCode = withContext(Dispatchers.IO){
 
         var resultCode: RegisterResultCode = RegisterResultCode.DefaultError
 
         try{
-            val response = authorizationApi.register(login, password, userName)
+            val response = authorizationApi.register(login, password, userName, email)
 
             if(response.isSuccessful){
                 response.body()?.let { registerResponse ->
